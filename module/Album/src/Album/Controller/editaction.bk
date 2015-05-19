@@ -1,0 +1,101 @@
+<?php
+ public function editAction()
+        {
+            
+            $id = $this->params('id');
+            
+            if (!$id) {
+                return $this->redirect()->toRoute('album', array(
+                    'action' => 'add'
+                ));
+            }
+            
+            try {
+                $album = $this->getAlbumTable()->getAlbum($id);
+            }
+            catch (\Exception $ex) {
+                return $this->redirect()->toRoute('album', array(
+                     'action' => 'index'
+                ));
+            }            
+            //Preseting form before printing
+            $form = new AlbumForm();
+            $form->get('submit')->setValue('Update');
+            $form->bind($album);
+                        
+            //$form->setValues($rec);
+
+            
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+                
+                //$album = new Album();
+                $form->setInputFilter($album->getInputFilter());
+                
+                /*$files = $request->getFiles()->toArray();
+                $data = $request->getPost()->toArray();*/
+                
+                /*$post = array_merge_recursive(
+                    $request->getPost()->toArray(),
+                    $request->getFiles()->toArray() //$request->getFiles()->toArray()
+                );*/
+                $files = $request->getFiles()->toArray();
+                /*$post = array_merge_recursive(
+                    $request->getPost()->toArray(),
+                    array('img' => $files['fileupload']['name'])
+                    //$request->getFiles()->toArray() //$request->getFiles()->toArray()
+                );*/
+                
+                //DebugBreak();
+                
+                $uniqueToken = md5(uniqid(mt_rand(), true));
+                $imageFileType = pathinfo(basename($files['fileupload']['name']),PATHINFO_EXTENSION);
+                $filename = $uniqueToken .'.'.$imageFileType;
+                
+                $form->setData($request->getPost()->toArray());
+
+                if ($form->isValid()) {
+                    //$newData = $form->getData();
+                    //$album->exchangeArray($newData);
+                    $album->img = $files['fileupload']['name'];
+                    $size = new Size(array('max' => 5000000)); //minimum bytes filesize
+                    $upload = new \Zend\File\Transfer\Adapter\Http();
+                    $upload->setValidators(array($size), $files['fileupload']['name']);
+                    
+                    if (!$upload->isValid()) {
+                    
+                        $dataError = $upload->getMessages();
+                        $error = array();
+                        foreach($dataError as $key => $row)
+                        {
+                            $error[] = $row;
+                        }
+                        $form->setMessages(array('fileupload' => $error));
+                    
+                    } else {
+                        $uploadPath = ROOT_PATH . '/public/img/albums/';
+                        
+                        $filterRename = new \Zend\Filter\File\Rename(array('target' => $uploadPath . $filename, 'overwrite' => false));
+                        $upload->addFilter($filterRename);
+                    
+                        if ($upload->receive()) {
+                            $album->img = $filename;    
+                        }
+                        ///ebugBreak();
+                        $this->getAlbumTable()->saveAlbum($album);
+                            
+                        // Redirect to list of albums
+                        return $this->redirect()->toRoute('album');                    
+                        
+                    
+                    }
+
+
+                }
+            }
+            return array('form' => $form, 'id' => $form->get('id')->getValue());
+            //echo $id;
+            /*$id = $this->_getParam('id', 1);
+            echo "The ID is".$id;*/
+        }  
+?>

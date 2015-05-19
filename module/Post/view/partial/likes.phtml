@@ -1,0 +1,54 @@
+<?php
+    //define("YOU", "you");
+    $postTypes = array("normal" => "n",
+                      "reply" => "r");
+
+    if ($postType == $postTypes['normal']) {
+        if (($key = array_search($userSession->username, $likes)) 
+                    !== false) {
+                    $firstPerson = "you";
+                    unset($likes[$key]);               
+        } else {
+            $firstPerson = array_shift($likes);    
+        }
+?>
+        <div class="liked-info">Liked by         
+<?php
+        if(count($likes) == 0) {
+?>
+            <span><?php print $firstPerson; ?></span>        
+<?php    
+        } elseif(count($likes) == 1) {
+            $secondPerson = array_shift($likes);
+?>
+            <span><?php print $firstPerson; ?></span> and 
+            <span><?php print $secondPerson ?></span>
+<?php            
+        } elseif(count($likes) == 2) {
+            $secondPerson = array_shift($likes);
+?>
+            <span><?php print $firstPerson; ?></span>, 
+            <span><?php print $secondPerson; ?></span> and 
+            <span title="<?php print $likes[0]; ?>">other person</span>
+<?php    
+        } else {
+            $secondPerson = array_shift($likes);
+?>
+            <span><?php print $firstPerson; ?></span>, 
+            <span><?php print $secondPerson; ?></span> and 
+            <span title="<?php print implode(", ",$likes); ?>"> other 
+                <?php print count($likes); ?> people </span>       
+<?php
+        }
+?>
+        </div>
+<?php    
+        } else {   //$this->postType['reply']
+?>
+            <span class="post-like" 
+                  title="<?php print implode(", ",$likes); ?>">
+                  <?php print count($likes); ?>
+            </span>
+<?php
+        }
+?>

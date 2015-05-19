@@ -1,0 +1,85 @@
+<?php
+    use Zend\Form\Element;
+    $form = $this->loginForm;
+    $errMsg = $form->getMessages();
+
+
+
+    //$form->setAttribute('action', $this->url('album', array('action' => 'index')));
+    $form->setAttribute('class', 'form-horizontal login-form');
+    $form->setAttribute('role', 'form');
+    $form->prepare();
+
+    print $this->form()->openTag($form);    
+?>
+<div class="form-group">
+    <?php
+        $element = $form->get('username');
+        $element->setLabel('User Name:')
+                ->setAttribute('id', 'username')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print '<div class="row">';
+        print $this->formLabel($element);
+        print '<div class="col-sm-3">';
+        print $this->formText($element);
+        print '</div>';
+        print '</div>';
+        print '<div class="row">';
+        if(isset($errMsg['username'])) {
+            print $this->errorHelper($errMsg['username']);
+        }
+        print '</div>';
+    ?>
+</div>
+<div class="form-group">
+    <?php
+        $element = $form->get('password');;
+        $element->setLabel('Password:')
+                ->setAttribute('id', 'password')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print '<div class="row">';
+        print $this->formLabel($element);
+        print '<div class="col-sm-3">';
+        print $this->formPassword($element);
+        print '</div>';        
+        print '</div>';
+        print '<div class="row">';
+        if(isset($errMsg['password'])) {
+            print $this->errorHelper($errMsg['password']);
+        }
+        print '</div>';     
+    ?>
+</div>
+<div class="form-group">
+    <?php
+        /*$element = $form->get('rememberme');;
+        $element->setLabel('Password:')
+                ->setAttribute('id', 'password')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));*/
+        /*$element->setUseHiddenElement(false);
+        print '<div class="row">';
+        print $this->formLabel($element);
+        print '<div class="col-sm-1">';
+        print $this->formCheckbox($element);
+        print '</div>';        
+        print '</div>';*/
+ 
+    ?>
+</div>
+<div class="form-group">
+<?php
+    print '<div class="col-sm-offset-2 col-sm-10">';
+    $element = new Element\Button('add-button');
+    $element->setLabel("Login")
+            ->setAttribute("type","submit")
+            ->setAttribute("class","btn btn-default");
+    print $this->formButton($element);    
+    print '</div>';    
+?>
+</div> 
+<?php
+echo $this->form()->closeTag($form);
+?>

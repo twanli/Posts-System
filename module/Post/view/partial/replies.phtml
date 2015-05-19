@@ -1,0 +1,141 @@
+<ul class='children'>
+    <?php 
+        foreach($children as $child):
+    ?>
+    <li id="post-<?php print $child['post_id']; ?>">
+        <div class="post-message">
+            <div class="message-head row">
+                <div class="col-sm-2">
+                    <img src="/img/users/<?php print $child['post_username_img']; ?>"
+                        alt="<?php print $child['post_username']; ?>" 
+                    /> 
+                </div>
+                <div class="col-sm-7">
+                    <span class="author">
+                        <?php print $child['post_username']; ?>
+                    </span>
+                    <span> in reply to </span>
+                    <span class="reply-to">
+                        <?php print $child['post_replyto_name']; ?>
+                    </span>
+                    <span class="time">
+                        <?php print $this->postTime($child['post_time']); ?>
+                    </span>      
+                </div>
+
+            </div>
+            <?php if ($child['post_username'] == 
+                              $userSession->username) {?>
+                <a href="javascript:void(0)" 
+                    rel="edit-post">Edit Post</a>
+            <?php } ?> 
+            <div class="message-body">
+            <div class="message">
+                <?php print $child['post_message']; ?>
+            </div>
+            <div class="row">
+                <div class="files col-sm-12">
+                    <?php
+                        $oldFileNames = explode(',',$child['post_file_old_names']);
+                        $newFileNames = explode(',',$child['post_file_new_names']);
+                        
+                        if ((!empty($child['post_file_new_names'])) 
+                            && count($newFileNames) > 0) {
+                    ?>
+                        <div class="row">
+                            <div class="files col-sm-12">                    
+                        <?php    
+                            $files = array();
+                            $images = array();
+                            
+                            for($i=0 ;$i<count($newFileNames); ++$i){
+                                $newName = $newFileNames[$i];
+                                $oldName = $oldFileNames[$i];
+                                $files[$newName] = $oldName;     
+                            }
+                            
+                            foreach ($files as $new => $old) {
+                                $fileType = strtolower(pathinfo(basename($new),
+                                            PATHINFO_EXTENSION));
+                                if($fileType == "jpg" || $fileType == "png"
+                                        || $fileType == "gif") {
+                                       $images[] = $new;     
+                                }
+                                print "<a class='".$fileType."' 
+                                        href='/posts/".$new."'
+                                        target='_self' 
+                                        download>".$old.
+                                "</a>";
+                                
+                            } 
+                        ?>
+                            </div>
+                        </div>
+                    <?php
+                        }
+                    ?>                    
+                </div>
+            </div>
+            <?php if(isset($images) && count($images) > 0)  { ?>
+                <div class="row">
+                    <div class="img-files col-sm-12">
+                        <?php
+                             foreach ($images as $img) {
+                                print "<a class='fancybox' href='/posts/".$img."'       
+                                        target='_self'>";
+                                print "<img  
+                                        src='/posts/".$img."'
+                                        alt='".$img."' 
+                                        />";
+                                print "</a>";                                
+                             }
+                             unset($images);                                     
+                        ?>
+                    </div>
+                </div>
+            <?php
+                }                       
+            ?> 
+            <?php 
+                $likes = explode(',', $child['post_like_usernames']); 
+                $likeString = LIKE;
+                $spanString = "";
+                
+                if ((!empty($child['post_like_usernames']))           
+                    && count($likes) > 0) {
+                    if (in_array($userSession->username, 
+                        $likes)) {
+                        $likeString = UNLIKE;                        
+                    }
+                    $spanString = $this->partial('partial/likes.phtml', array(
+                                     'likes'    => $likes,
+                                     'postType' => $child['post_type'],
+                                ));
+                    
+                    /*$spanString = $this->getLikedBy(
+                            $likes, 
+                            $child['post_type']
+                    );*/                                
+                }
+            ?>
+            <a class="post-like" href="javascript:void(0)"
+                    rel="<?php print strtolower($likeString); ?>"
+                    data-userid="<?php print $userSession->id; ?>"
+                    data-postid="<?php print $child['post_id']; ?>"
+                    data-posttype="<?php print $child['post_type']; ?>"
+                    >
+                    <?php print $likeString; ?>
+            </a>
+            <a class="post-reply" href="javascript:void(0)">Reply</a>
+            <?php                                 
+                print $spanString; 
+            ?>
+            </div>
+        </div>
+    </li>
+    
+    <?php 
+        endforeach;
+    ?>
+</ul>
+

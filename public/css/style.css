@@ -1,0 +1,330 @@
+body {
+    padding-top: 145px;
+    padding-bottom: 40px;
+    font-size: 18px;
+
+}
+
+a {
+    color: #172778;
+}
+
+.zf-green {
+    color: #68b604;
+}
+
+.btn-success {
+  background-color: #57a900;
+  background-image: -moz-linear-gradient(top, #70d900, #57a900);
+  background-image: -ms-linear-gradient(top, #70d900, #57a900);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
+  background-image: -webkit-linear-gradient(top, #70d900, #57a900);
+  background-image: -o-linear-gradient(top, #70d900, #57a900);
+  background-image: linear-gradient(top, #70d900, #57a900);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0);
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active,
+.btn-success.disabled,
+.btn-success[disabled] {
+  background-color: #57a900;
+}
+
+.btn-success:active, .btn-success.active {
+  background-color: #57a900;
+}
+
+div.container a.brand {
+    background: url("../img/zf2-logo.png") no-repeat scroll 0 10px transparent;
+    margin-left: 0;
+    padding: 8px 20px 12px 40px;
+}
+
+nav {
+    background-color: #ffcc00;
+}
+.navbar-brand {
+    font-size: 25px;
+    font-style: italic;
+}
+.navbar-nav {
+    padding-left: 3%;
+}
+.navbar-nav>li>a {
+    line-height: 100px;
+    font-size: 20px;
+    text-decoration: underline;
+}
+.navbar-nav>li.logout {
+    float: right;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    vertical-align: middle;    
+}
+/*.table tr th:nth-child(3) {
+    width: 25%;
+} 
+.table tr th:nth-child(2) {
+    width: 30%;
+}*/ 
+.table tr th a {
+    text-decoration: underline;
+}
+.table td.text-data, .table th {
+    text-align: center;
+}
+.table td.edit-link a {
+    padding: 0 10px;
+    text-decoration: underline;
+}
+input.form-control[type="file"] {
+    border: none;
+}
+span.alert {
+    font-size: 14px;
+    color: #c0392b;
+    padding: 0;
+}
+.site-nav {
+    float: left;
+    margin-bottom: 10px;
+    padding-right: 20px;
+}
+.site-nav a {
+    display: block;    
+    top: 10px;
+    font-size: 20px;
+    text-decoration: underline;
+}
+.head-line {
+    margin-bottom: 15px;
+}
+.import {
+    margin-top: 3px;
+}
+.import .row {
+    padding-top: 15px;
+}
+form#search button {
+    position: relative;
+    left: -20px;
+}
+
+span.highlight {
+    background-color: yellow;
+}
+
+.collapse.navbar-collapse {
+    position: relative;
+}
+.nav.navbar-nav {
+    width: 64%;
+    
+}
+.login-form label {
+    text-align: right;
+}
+
+.login-form {
+    /*border: 1px solid grey;*/
+    margin-top: 50px;
+    padding: 30px;
+}
+.logout > span, .logout > a {
+    float: left;
+}
+.logout > span {
+    line-height: 100px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    
+}
+.post-message-container, .post-message-form {
+    width: 55%;
+    margin: 0 auto;
+}
+.post-message-container  {
+    margin-top: 20px
+}
+.post-message-form form {
+    margin-bottom: 10px;
+}
+.file-attachments {
+    margin-top: 20px;
+}
+.img-files img {
+    max-width: 50%;
+    display: inline-block;
+    margin: 20px 5px;
+    height: 200px;
+}
+#post-files-attach, #reply-files-attach {
+    min-height: 100px;
+    background: #fff;
+    border: 1px solid #C2C2C2;
+    border-radius: 4px;
+}
+#post-files-attach span, #reply-files-attach span {
+    color: #C2C2C2;
+    font-size: 15px;    
+    display: block;
+}
+#post-img-attach img, #reply-img-attach img {
+    max-width: 100%;
+}
+#post-files-attach p, #reply-files-attach p, .files a {
+    padding-left: 55px;
+    font-size: 13px;
+    min-height: 50px;
+    display: inline-block;
+}
+
+.files a {
+    line-height: 50px;
+}
+.pdf {
+    background: url('../img/icons/pdf-icon.png') no-repeat;
+}
+.png {
+    background: url('../img/icons/img-png.png') no-repeat;
+}
+.jpg {
+    background: url('../img/icons/img-jpg.png') no-repeat;
+}
+.gif {
+    background: url('../img/icons/img-gif.png') no-repeat;
+}
+.txt {
+    background: url('../img/icons/txt-icon.png') no-repeat;
+}
+
+.post-message-form span.post-error, .post-message-container span.post-error {
+    font-size: 16px;
+    color: #CC0000;
+    display: block;
+    margin-top: 3px;
+}
+.post-message-container  ul {
+    padding-left: 0;
+}
+.post-message-container ul.children {
+    border: 1px solid #cccccc;
+    background: #f2f2f2;
+    border-radius: 10px;
+    padding: 20px;    
+}
+.post-message-container ul.children li:first-child {
+    border-top: 0;
+    padding-top: 10px;
+}
+.post-message-container ul.children li {
+    border-top: 1px solid #cccccc;
+    padding-top: 10px;
+}
+.post-message-container  ul li {
+    list-style-type: none;
+    list-style-position: outside;
+}
+
+.post-message-container > ul > li {
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    background: #ffff99;
+    margin: 20px 0;
+    padding: 20px;
+}
+
+.post-message-container form {
+    margin: 0 15px 20px;
+}
+
+.post-message-container form span {
+    color: #b1a09d;
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 5px;
+} 
+.post-message {
+    margin-bottom: 20px;
+    position: relative;
+}
+.post-message .message-head {
+    margin-bottom: 5px;
+}
+.post-message .message-head img {
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+.post-message .message-head .liked {
+    min-height: 25px;
+}
+.post-message .message-head .liked .liked-info{
+    background: url('../img/icons/like.png') no-repeat;
+    padding-left: 30px;
+}
+.post-message .message-head span {
+    color: #112179;
+}
+.post-message .message-head > .col-sm-2 {
+    width: 15%;
+}
+.post-message span.author, .post-message span.reply-to {
+    font-weight: bold;
+    color: #112179;
+}
+.post-message span.reply-to {
+    padding-right: 10px;
+}
+.post-message span.time {
+    color: #7F939D; 
+}
+.post-message a.post-reply, .post-message a.post-like {
+    padding-right: 10px;
+    text-decoration: underline; 
+}
+span.post-like {
+    color: #112179;
+    background: url('../img/icons/like-reply.png') no-repeat;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    padding-left: 28px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.action-buttons label {
+    font-size: 16px;
+    float: right;
+    font-weight: normal;
+    font-weight: normal;
+}
+
+a[rel='edit-post'] {
+    text-decoration: underline;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.post-message textarea {
+    margin: 15px 0;
+}
+.post-message button[name='edit-button'] {
+    margin-bottom: 10px;
+}
+.message-head .col-sm-3  a[rel='edit-post'] {
+    float: right;
+}
+.animation_image {
+    display: none;
+}
+
+
+
+
+
+

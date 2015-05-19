@@ -1,0 +1,4 @@
+-making templates for busniess logic
+-javascript plugin
+-attach files controller
+-javascript templates

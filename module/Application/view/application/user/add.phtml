@@ -1,0 +1,140 @@
+<?php
+    use Zend\Form\Element;
+    use Zend\Session\Container;
+    use Application\Model\UserRole;
+    
+    $userSession = new Container('user');
+    
+    $errMsg = $form->getMessages();
+    //DebugBreak();
+    $title = 'Add user';
+    $this->headTitle($title);
+?>               
+<span class="site-nav"><a href="<?php echo $this->url('users') ?>">Back</a></span>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+    $form->setAttribute('action', $this->url('users', array('action' => 'add')));
+    $form->setAttribute('class', 'form-horizontal');
+    $form->setAttribute('role', 'form');
+    $form->prepare();
+    print $this->form()->openTag($form);
+    
+?>
+
+<div class="form-group">
+    <?php
+        $element = $form->get('username');
+        $element->setAttribute('id', 'username')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print $this->formLabel($element);
+        print '<div class="col-sm-5">';
+        print $this->formText($element);
+        print '</div>';
+        if(isset($errMsg['username'])) {
+            print $this->errorHelper($errMsg['username']);
+        }
+    ?>
+</div>
+
+<div class="form-group">
+    <?php
+        foreach($roles as $role) {
+           $selectOptions[$role->user_roles_id] = $role->user_roles_name;
+           
+           if($role->user_roles_role == UserRole::ROLE_ADMIN) {
+              $selectValue = $role->user_roles_id; 
+           }  
+        }
+        $element = $form->get('role');
+        $element->setAttribute('id', 'role')
+                ->setAttribute('class', 'form-control')
+                ->setAttribute('options', $selectOptions)
+                ->setAttribute('value', $selectValue)
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print $this->formLabel($element);
+        print '<div class="col-sm-5">';
+        print $this->formSelect($element);
+        print '</div>';        
+    ?>
+</div>
+
+<div class="form-group">
+    <?php
+        $element = $form->get('password');;
+        $element->setAttribute('id', 'password')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print $this->formLabel($element);
+        print '<div class="col-sm-5">';
+        print $this->formPassword($element);
+        print '</div>';
+        if(isset($errMsg['password'])) {
+            print $this->errorHelper($errMsg['password']);
+        }
+             
+    ?>
+</div>
+<div class="form-group">
+    <?php
+        $element = $form->get('repeat_password');;
+        $element->setAttribute('id', 'repeat_password')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print $this->formLabel($element);
+        print '<div class="col-sm-5">';
+        print $this->formPassword($element);
+        print '</div>';
+        if(isset($errMsg['repeat_password'])) {
+            print $this->errorHelper($errMsg['repeat_password']);
+        }
+             
+    ?>
+</div>
+<div class="form-group">
+    <?php
+        $element = $form->get('active');;
+        $element->setAttribute('id', 'active')
+                ->setAttribute('class', 'form-control')
+                ->setAttribute('checked', 'checked')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print '<div class="row">';
+        print $this->formLabel($element);
+        print '<div class="col-sm-1">';
+        print $this->formCheckbox($element);
+        print '</div>';        
+
+        print '</div>';
+        
+    ?>
+</div>
+<div class="form-group">
+    <?php
+        $element = $form->get('gen_password');;
+        $element->setAttribute('id', 'gen-passwoord')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print '<div class="row">';
+        print $this->formLabel($element);
+        print '<div class="col-sm-1">';
+        print $this->formCheckbox($element);
+        print '</div>';        
+        print '</div>';
+        print '<div class="row">';
+        if(isset($errMsg['gen_password'])) {
+            print $this->errorHelper($errMsg['gen_password']);
+        }
+        print '</div>';
+    ?>
+</div>
+<?php
+    print '<div class="col-sm-offset-2 col-sm-10">';
+    $element = new Element\Button('add-button');
+    $element->setLabel("Add User")
+            ->setAttribute("type","submit")
+            ->setAttribute("class","btn btn-default");
+    print $this->formButton($element);    
+    print '</div>';    
+?> 
+<?php
+    print $this->form()->closeTag();

@@ -1,0 +1,3 @@
+AddType application/octet-stream .txt
+
+AddType application/octet-stream .png

@@ -1,0 +1,270 @@
+ <?php
+    use Zend\Form\Element;
+    use Zend\Permissions\Acl\Acl;
+    use Zend\Session\Container;
+    use Application\Model\UserRole;
+ 
+ 
+    $userSession = new Container('user');
+    $acl = $this->layout()->acl;
+ 
+ // module/Album/view/album/album/index.phtml:
+    $errMsg = $importForm->getMessages();
+    $title = 'My albums';
+    $this->headTitle($title);
+ ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ <div class="row head-line">
+    <div class="col-sm-4 ">
+        <?php if ($acl->isAllowed($userSession->role, 
+                  UserRole::ALBUMS_ADD)) :  ?>            
+        <span class="site-nav">
+            <a 
+                href="<?php print $this->url('album', array('action'=>'add'));?>">
+                Add new album
+            </a>
+        </span>
+        <div class="clearfix"></div>   
+        <?php endif; ?>
+    </div>
+    <div class="col-sm-4 import">
+        <?php
+            if ($acl->isAllowed($userSession->role, UserRole::ALBUMS_IMPORT)) { 
+
+                 $importForm->setAttribute('action', 
+                                            $this->url('album', array('action' => 'index')));
+                 $importForm->setAttribute('class', 'form-horizontal');
+                 $importForm->setAttribute('role', 'form');
+                 $importForm->prepare();
+
+                 print $this->form()->openTag($importForm);
+                 print $this->formHidden($importForm->get('importform'));
+        ?>
+     <div class="form-group">
+         <?php
+            
+            //print '<div class="col-sm-offset-2 col-sm-5">';
+            $element = $importForm->get('zipupload');
+            $element->setLabel('Import CSV/XML (As Zip File):'.
+                                '(CSV fields should be seperated by comma)')
+                    ->setLabelAttributes(array('class' => 'control-label'))
+                    ->setAttribute('class', 'form-control');
+            
+            print $this->formLabel($element);
+            print '<div class="row">';
+            print '<div class="col-sm-8">';
+            print $this->formFile($element);
+            print '</div>';
+
+
+        //print '<div class="col-sm-offset-10 col-sm-2">';
+        
+            $element = new Element\Button('edit-button');
+            $element->setLabel("Confirm")
+                    ->setAttribute("type","submit")
+                    ->setAttribute("class","btn btn-default");
+            print '<div class="col-sm-4">';
+            print $this->formButton($element);
+            print '</div>';
+            if(isset($errMsg['zipupload'])) {
+                print $this->errorHelper($errMsg['zipupload']);
+            }
+            print '</div>';
+           
+            //print $this->formSubmit($exportForm->get('submit'));
+
+            print $this->form()->closeTag();
+         
+        ?>  
+    
+    </div>
+    <?php } ?>
+    </div>
+    <div class="col-sm-4">
+
+     <?php
+         if($orderby==null) {
+             $url = $this->url('album', array('action' => 'index'));
+         } else {
+             $url = $this->url('sort', array('orderby'=>$orderby, 'way'=>$way));
+         }
+         $exportForm->setAttribute('action', $url);
+         $exportForm->setAttribute('class', 'form-horizontal');
+         $exportForm->setAttribute('role', 'form');
+         $exportForm->prepare();
+
+         echo $this->form()->openTag($exportForm);
+         echo $this->formHidden($exportForm->get('exportform'));
+
+     ?>
+     <div class="form-group">
+         <?php
+            $element = $exportForm->get('exportformat');
+            $element->setAttribute('class', 'form-control')
+                    ->setLabel('Export To:')
+                    ->setLabelAttributes(array('class' => 'col-sm-8 control-label'));
+            print $this->formLabel($element);
+            print '<div class="col-sm-4">';
+            print $this->formSelect($element);
+            print '</div>';    
+        ?> 
+     </div>
+     <?php
+        print '<div class="col-sm-offset-9 col-sm-3">';
+        
+        $element = new Element\Button('edit-button');
+        $element->setLabel("Confirm")
+                ->setAttribute("type","submit")
+                ->setAttribute("class","btn btn-default");
+        print $this->formButton($element);
+        //print $this->formSubmit($exportForm->get('submit'));
+        print '</div>'; 
+        print $this->form()->closeTag();  
+    ?>
+    </div>
+
+ </div>
+<div class="row"> 
+    <div class="search-form col-sm-offset-8 col-sm-4">
+        <?php
+            $searchForm->setAttribute('action', $this->url('album', array('action' => 'index')));
+            $searchForm->setAttribute('class', 'form-horizontal');
+            $searchForm->setAttribute('role', 'form');
+            $searchForm->prepare();
+
+            print $this->form()->openTag($searchForm);
+            print $this->formHidden($searchForm->get('searchform'));
+        ?>
+        <div class="form-group row">
+            <?php
+                $element = $searchForm->get('search');
+                $element->setAttribute('id', 'search')
+                        ->setAttribute('class', 'form-control')
+                        ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+                print '<div class="col-sm-9">';
+                print $this->formText($element);
+                print '</div>';
+                $element = new Element\Button('search-button');
+                $element->setLabel("Search")
+                        ->setAttribute("type","submit")
+                        ->setAttribute("class","btn btn-default");
+                print '<div class="col-sm-3">';
+                print $this->formButton($element);    
+                print '</div>';  
+                
+            ?>
+        </div>
+    </div>
+</div>
+
+ <div class="table-responsive">
+    <table class="table table-hover table-bordered table-condensed">
+    <tr class="success">
+     <th>Cover</th>
+     <th><?php
+             if ($orderby == 'title') {
+                 switch ($way) {
+                    case 'asc':
+                      $url = $this->url('sort', array('orderby'=>'title', 'way'=>'desc'));
+                      $title = "SORT IN DESCENDING ORDER";
+                      break;
+                    case 'desc':
+                      $url = $this->url('sort', array('orderby'=>'title', 'way'=>'asc'));
+                      $title = "SORT IN ASCENDING ORDER";
+                      break;
+                    default:
+                      $url = $this->url('sort', array('orderby'=>'title', 'way'=>'asc'));
+                      $title = "SORT IN ASCENDING ORDER";
+                      break;                 
+                 }
+             } else {
+                 $url = $this->url('sort', array('orderby'=>'title', 'way'=>'asc'));
+                 $title = "SORT IN ASCENDING ORDER";
+             }
+         ?>
+         <a href="<?php print $url.'?page='.$page; ?>" title="<?php print $title; ?>">
+            Title
+         </a>
+
+     </th>
+     <th><?php
+            
+             if ($orderby == 'artist') {
+                 switch ($way) {
+                    case 'asc':
+                      $url = $this->url('sort', array('orderby'=>'artist', 'way'=>'desc'));
+                      $title = "SORT IN DESCENDING ORDER";
+                      break;
+                    case 'desc':
+                      $url = $this->url('sort', array('orderby'=>'artist', 'way'=>'asc'));
+                      $title = "SORT IN ASCENDING ORDER";
+                      break;
+                    default:
+                      $url = $this->url('sort', array('orderby'=>'artist', 'way'=>'asc'));
+                      $title = "SORT IN ASCENDING ORDER";
+                      break;                 
+                 }
+             } else {
+                 $url = $this->url('sort', array('orderby'=>'artist', 'way'=>'asc'));
+                 $title = "SORT IN ASCENDING ORDER";
+             }
+         ?>
+         <a href="<?php print $url.'?page='.$page; ?>" title="<?php print $title; ?>">
+            Artist
+         </a>
+            
+     </th>
+     <?php if ($acl->isAllowed($userSession->role, UserRole::ALBUMS_EDIT)) { ?>
+         <th>&nbsp;</th>
+     <?php } ?>
+    </tr>
+    <?php foreach ($this->paginator as $album) : ?>
+    <tr>
+     <td>
+         <?php if (!empty($album->img) && file_exists(ROOT_PATH . '/public/img/albums/'.$album->img)) : ?>
+            <img src="/img/albums/<?php print $album->img;?>" />
+         <?php else: ?>
+            <img src="/img/albums/default.png" />
+         <?php endif; ?>
+     </td>
+     <td class="text-data"><?php print $this->escapeHtml($album->title);?></td>
+     <td class="text-data"><?php print $this->escapeHtml($album->artist);?></td>
+     <?php  
+        if ($acl->isAllowed($userSession->role, UserRole::ALBUMS_EDIT)) { ?>
+        
+        <td class="edit-link">
+             <a href="<?php print $this->url('album',
+                 array('action'=>'edit', 'id' => $album->id));?>">Edit</a>
+             <a href="<?php print $this->url('album',
+                 array('action'=>'delete', 'id' => $album->id));?>" rel="delete">Delete</a>
+         </td>
+     <?php } ?>
+    </tr>
+    <?php endforeach; ?>
+    </table>
+ </div>
+<?php
+ // add at the end of the file after the table
+    if ($orderby == null) {
+        $routeArray = array(
+            'route' => 'album',
+        );
+    } else {
+        $routeArray = array(
+            'route' => 'sort',
+            'order' => $orderby,
+            'way' => $way
+        );        
+    }
+    print $this->paginationControl(
+        // the paginator object
+        $this->paginator,
+        // the scrolling style
+        'sliding',
+        // the partial to use to render the control
+        'partial/paginator.phtml',
+        // the route to link to when a user clicks a control link
+        $routeArray
+    );
+ ?>
+ 

@@ -1,0 +1,9 @@
+ d34da380 viki
+b91088ca blog idnes
+3dd1bf27 lidovky
+
+Dobry den, jsem s polovicnim puvodem z Cech a polovinou ze Syrie, dokazu psat o tamni obcanske valce, o tom, co se vlastne ve skutecnosti tam deje, a vubec o celkovem deni v oblasti. Nazor na izraelsko palestinsky konflikt a jak by mohl byt vyresen. Znam pohled tamni spolecnosti na vyvoj, tzv. islam neboli muslimsky svet je stejne rozlehla oblast jako Evropa a jsou tam stejne velke rozdily mezi jednotlivymi staty jako u nas (v ramci evropske kulturni oblasti) mezi Francii a Cechy. Proto napr. Islamsky stat, je trochu svym zpusobem bublina, uz jenom tim, ze ve skutecnosti je stejne nenaviden mistni spolecnosti jako u nas, protoze realne neprezentuje zadne hodnoty, ani z nabozenskeho hlediska.
+
+Jaka je skutecne situace na Blizkem vychode a co doopravdy hrozi? O Evrope z globalniho hlediska (Evropa jako entita oklopena Staty Blizkeho vychodu a severni Afriky na jedne strane a Ruskem z druhe strany, ne z pohledu loklanich statu)
+
+SELECT post_id, post_user_id , users.username, GROUP_CONCAT(like_users.username) FROM `posts` INNER JOIN users ON post_user_id = id LEFT JOIN likes ON likes.like_post_id = posts.post_id LEFT JOIN users AS like_users ON likes.like_user_id = like_users.id WHERE post_type = 'n' GROUP BY post_id

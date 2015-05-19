@@ -1,0 +1,7 @@
+5360 + 3360 + 7000 + 1000 + 4200 = 21000
+5386 - 2000 = 3386
+
+                data: data,
+                dataType: 'json',
+                processData: false, // Don't process the files
+                contentType: false,

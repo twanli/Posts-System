@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<albums>
+    <album>
+        <id>100</id>
+        <title>Bon Jovi Greatest Hits</title>
+        <artist>Bon Jovi</artist>
+        <img></img>
+    </album>
+    <album>
+        <id>135</id>
+        <title>Bon Jovi Greatest Hits - The Ultimate Collection</title>
+        <artist>Bon Jovi</artist>
+        <img></img>
+    </album>
+    <album>
+        <id>58</id>
+        <title>What About Now</title>
+        <artist>Bon Jovi</artist>
+        <img></img>
+    </album>
+    <album>
+        <id>11</id>
+        <title>What About Now (Deluxe Version)</title>
+        <artist>Bon Jovi</artist>
+        <img></img>
+    </album>
+</albums>

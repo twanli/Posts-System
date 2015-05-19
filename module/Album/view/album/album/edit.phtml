@@ -1,0 +1,90 @@
+<?php
+    use Zend\Form\Element;
+    $errMsg = $form->getMessages();
+    $title = 'Update album';
+    $this->headTitle($title);
+?>
+<span class="site-nav"><a href="<?php echo $this->url('album') ?>">Back</a></span>
+<div class="clearfix"></div>
+
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+    $form->setAttribute('action', $this->url('album', array('action' => 'edit', 'id' => $id)));
+    $form->setAttribute('class', 'form-horizontal');
+    $form->setAttribute('role', 'form');
+    $form->prepare();
+    print $this->form()->openTag($form);
+    print $this->formHidden($form->get('id'));
+?>
+           
+<div class="form-group">
+    <?php
+        $element = $form->get('title');
+        $element->setLabel('Title:')
+                ->setAttribute('id', 'title')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print $this->formLabel($element);
+        print '<div class="col-sm-5">';
+        print $this->formText($element);
+        print '</div>';        
+        if(isset($errMsg['title'])) {
+            print $this->errorHelper($errMsg['title']);
+        }
+    ?>
+</div>
+<div class="form-group">
+    <?php
+        $element = $form->get('artist');
+        $element->setLabel('Artist:')
+                ->setAttribute('id', 'artist')
+                ->setAttribute('class', 'form-control')
+                ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+        print $this->formLabel($element);
+        print '<div class="col-sm-5">';
+        print $this->formText($element);
+        print '</div>';
+        if(isset($errMsg['artist'])) {
+            print $this->errorHelper($errMsg['artist']);
+        }
+    ?>
+</div>
+<div class="form-group">
+    <?php
+        print '<div class="col-sm-offset-2 col-sm-10">';
+        $imgStr = $form->get('img')->getValue();
+        if (!empty($imgStr) && file_exists(ROOT_PATH . '/public/img/albums/'.$imgStr)) {
+            print '<img src="/img/albums/'. $imgStr . '" />';    
+        } else {
+            print '<img src="/img/albums/default.png" width="150" />';
+        }
+        print '</div>';
+        if(isset($errMsg['img'])) {
+            print $this->errorHelper($errMsg['img']);
+        }
+        print '<div class="col-sm-offset-2 col-sm-5">';
+        $element = $form->get('fileupload');
+        $element->setAttribute('class', 'form-control');
+        print $this->formFile($element);
+        print '</div>';
+        if(isset($errMsg['fileupload'])) {
+            print $this->errorHelper($errMsg['fileupload']);
+        }             
+    
+    ?>
+</div>
+<?php
+    print $this->formHidden($form->get('img'));
+    print '<div class="col-sm-offset-2 col-sm-10">';
+    
+    $element = new Element\Button('edit-button');
+    $element->setLabel("Edit")
+            ->setAttribute("type","submit")
+            ->setAttribute("class","btn btn-default");
+    print $this->formButton($element);
+    //print $this->formSubmit($form->get('submit'));
+    print '</div>';    
+?> 
+<?php
+    
+    print $this->form()->closeTag();    

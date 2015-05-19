@@ -1,0 +1,58 @@
+<?php 
+    use \Application\Model\UserRole;    
+?>
+<?php
+    $title = 'Users';
+    $this->headTitle($title);    
+?>
+ 
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ <p class="site-nav">
+     <a  
+        href="<?php echo $this->url('users', array('action'=>'add'));?>">
+        Add new user
+     </a>
+ </p>
+<div class="clearfix"></div>
+
+<div class="table-responsive">
+    <table class="users table table-hover table-bordered table-condensed">
+    <tr class="success">
+        <th class="col-md-5">User Name</th>
+        <th class="col-md-2">Role</th>
+        <th class="col-md-1">Active</th>
+        <th class="col-md-4">&nbsp;</th>      
+    </tr>
+    <?php foreach ($users as $user) : 
+    ?>
+    
+    <tr>
+     <td><?php print $this->escapeHtml($user['username']);?></td>
+     <td class="text-data"><?php print $this->escapeHtml($user['user_roles_name']);?></td>
+     <td class="text-data">
+     <?php if ($user['active'] == true) {
+                print 'Yes';
+            } else {
+                print 'No';                
+            } ?>
+     </td>
+     <td class="edit-link">
+         <a href="<?php print $this->url('users',
+             array('action' => 'edit', 'id' => $user['id']));?>">Edit</a>
+         <a href="<?php print $this->url('users',
+             array('action' => 'genPassword', 'id' => $user['id']));?>">Generate new password</a>
+         <?php                
+            $userRole = new UserRole();
+                                
+            if($user['user_roles_role'] != UserRole::ROLE_SUPERADMIN) {
+         ?>       
+             <a href="<?php print $this->url('users',
+                 array('action' => 'delete', 'id' => $user['id']));?>" rel="delete">Delete</a>
+         <?php
+            }   
+         ?>
+     </td>
+    </tr>
+    <?php endforeach; ?>
+    </table>
+ </div>

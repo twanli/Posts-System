@@ -1,0 +1,77 @@
+<?php 
+    use Zend\Form\Element;
+    use Post\Model\Post;
+    
+    define("LIKE", "Like");
+    define("UNLIKE", "Unlike");
+    
+    $post = new Post();
+?>
+<div class="post-message-form row">
+    <div class="col-sm-2"> 
+        <img src="<?php print "/img/users/".$userSession->img; ?>" 
+             alt="<?php print $userSession->username; ?>"
+        >
+    </div>
+    <div class="col-sm-10">
+        <?php
+            //PRINT POST FORM
+            $form->setAttribute('action', $this->url('attach-files', array('action' => 'upload')));
+            $form->setAttribute('id', 'post-form');
+            $form->setAttribute('class', 'form-horizontal');
+            $form->setAttribute('role', 'form');
+            $form->prepare();
+            print $this->form()->openTag($form);
+            
+        ?>
+                   
+        <div class="form-group">
+            <?php
+                $element = $form->get('post_message');
+                print $this->formTextArea($element);
+            ?>
+        </div>
+        <div class="row action-buttons">
+            <div class="col-sm-2">
+                <?php
+                    $element = new Element\Button('add-button');
+                    $element->setLabel("Add Post")
+                            ->setAttribute("class","btn btn-default")
+                            ->setAttribute("type","submit");
+                    print $this->formButton($element);    
+
+
+                ?>
+            </div>
+            <?php
+                $element = $form->get('fileselect');
+            ?>
+            <div class="col-sm-5">
+                <?php
+                    print $this->formLabel($element);
+                ?>
+            </div>
+            <div class="col-sm-5">            
+                <?php
+                    print $this->formFile($element);
+                ?>
+            </div>
+        </div>
+        <div class="row file-attachments">
+            <div id="post-img-attach" class="col-sm-7">
+            </div>
+            <div id="post-files-attach" class="col-sm-5">
+                <span>You can drag & drop files here ..</span>
+            </div>
+        </div>
+        <?php print $this->form()->closeTag(); ?>
+    </div>
+</div>
+<div class="post-message-container">
+    <ul>     
+    </ul>
+</div>
+<div class="animation_image" align="center">
+    <img src="img/ajax-loader.gif">
+</div>
+ 

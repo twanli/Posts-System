@@ -1,0 +1,64 @@
+<li id="post-${post.id}">
+    <div class="post-message">
+        <div class="message-head">
+            <div class="row">
+                <div class="col-sm-2">
+                    <img src="/img/users/${post.userImg}" 
+                         alt="${post.userName}"
+                    >            
+                </div>
+                <div class="col-sm-7">
+                    <span class="author">
+                        ${post.userName}                        
+                    </span>
+                    {{if post.reply}}
+                        <span>in reply to</span>
+                        <span class="reply-to">
+                            ${post.replyTo}    
+                        </span>
+                    {{/if}}
+                    <span class="time">just now</span>
+                </div>
+            </div>
+            {{if post.type == "n"}}
+                <div class="row">
+                    <div class="liked col-sm-12">
+                    </div>
+                </div>
+            {{/if}}
+            
+        </div>
+        <a href="javascript:void(0)" 
+            rel="edit-post">Edit Post</a>
+        
+        <div class="message-body">
+            <div class="message">
+                ${post.message}                        
+            </div>
+            <div class="row">
+                <div class="files col-sm-12">
+                    {{if post.files}}
+                        {{each(f, file) post.files}} 
+                            <a class="${file.type}" 
+                                href="/posts/${file.new}"
+                                target="_self" download>
+                                ${file.old}
+                            </a>    
+                        {{/each}}
+
+                    {{/if}}                            
+
+                </div>
+            </div>
+
+            <a class="post-like" rel="like" 
+            data-userid="${post.userId}"
+            data-postid="${post.id}"
+            data-posttype="${post.type}"
+            href="javascript:void(0)">Like</a>
+            <a class="post-reply" href="javascript:void(0)">Reply</a>
+        </div>
+    </div>
+</li>
+
+

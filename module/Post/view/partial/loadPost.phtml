@@ -1,0 +1,75 @@
+<?php
+    define("JUST_NOW", "just now");
+?>
+<li id="post-<?php print $data['post_id'];?>">
+    
+    <div class="post-message">
+        <div class="message-head">
+            <div class="row">
+                <div class="col-sm-2">
+                    <img src="<?php print "/img/users/".$data['post_username_img']; ?>" 
+                         alt="<?php print $data['post_username']; ?>"
+                    >            
+                </div>
+                <div class="col-sm-10">
+                    <span class="author">
+                        <?php print $data['post_username']; ?>
+                    </span>
+                    <?php if (isset($data['post_reply_to'])) : ?> 
+                    <span>in reply to</span>
+                    <span class="reply-to">
+                        <?php print $data['post_reply_to']; ?>
+                    </span>
+                    <?php endif; ?>
+                    <span class="time"><?php print JUST_NOW; ?></span>
+                </div>
+            </div>
+            <?php 
+                if ($data['post_type'] == $postType['normal']) : 
+            ?>
+                <div class="row">
+                    <div class="liked col-sm-12">
+                    </div>
+                </div>
+            <?php endif; ?>
+            
+        </div>
+        
+        <div class="message">
+            <?php print $data['post_message']; ?>
+        </div>
+                        <div class="row">
+                    <div class="files col-sm-12">
+                        <?php
+                            if (count($files) > 0) {
+                        ?>
+                            <div class="row">
+                                <div class="files col-sm-12">                    
+                            <?php    
+                                foreach ($files as $new => $old) {
+                                    $fileType = pathinfo(basename($new),
+                                                PATHINFO_EXTENSION);
+                                    print "<a class='".$fileType."' 
+                                            href='/posts/".$new."'
+                                            target='_self' 
+                                            download>".$old.
+                                    "</a>";
+                                    
+                                } 
+                            ?>
+                                </div>
+                            </div>
+                        <?php
+                            }
+                        ?>                    
+                    </div>
+                </div>
+
+        <a class="post-like" rel="like" 
+        data-userid="<?php print $data['post_user_id']; ?>"
+        data-postid="<?php print $data['post_id']; ?>"
+        data-posttype="<?php print $data['post_type']; ?>"
+        href="javascript:void(0)">Like</a>
+        <a class="post-reply" href="javascript:void(0)">Reply</a>
+    </div>
+</li>
