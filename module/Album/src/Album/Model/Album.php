@@ -17,6 +17,7 @@ use \Zend\Validator\NotEmpty;
 class Album implements InputFilterAwareInterface
 {
     public $id;
+    public $albumid;
     public $artist;
     public $title;
     public $img;
