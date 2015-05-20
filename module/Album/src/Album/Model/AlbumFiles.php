@@ -24,6 +24,7 @@
         const CSV_XML_DIRECTORY = '/public/files/';
         const ALBUMS_DIRECTORY = '/public/img/albums/';
         const CSV_XML_ITEMS_NBR = 3;
+        const CSV_XML_ITEMS_TEST = 10;
         const RESIZEWIDTH = 200;
         
         private $serviceLocator;
