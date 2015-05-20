@@ -20,7 +20,6 @@ class Album implements InputFilterAwareInterface
     public $artist;
     public $title;
     public $img;
-    public $imgTest;
     
     protected $inputFilter; 
 
