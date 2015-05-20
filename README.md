@@ -1,6 +1,6 @@
 Hi this is a small Tatatka system where you can like/unlike comments, attach files to post and so on.
 
-<<<<<<< HEAD
+
 ZendSkeletonApplication
 =======================
 
@@ -81,3 +81,6 @@ project and you should be ready to go! It should look something like below:
 =======
 Hi this is a small Tatatka system where you can like/unlike comments, attach files to post and so on.
 >>>>>>> 8d1e4a596df48eb0ea937875e526e964b6c51ac9
+=======
+this a new readme.md file
+>>>>>>> 826f1de7db89d33ab8b700db7eee1d61eb876427
