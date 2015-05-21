@@ -4,6 +4,8 @@
     use Post\Model\Post;
     use Post\Model\PostTable;
     use Post\Model\Like;
+    use Post\Model\PostTable2;
+    use Post\Model\Like2;
     use Post\Model\LikesTable;
     use Post\Model\PostFiles;
     use Post\Model\PostFilesTable;
