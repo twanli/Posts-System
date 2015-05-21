@@ -17,7 +17,10 @@ use \Zend\Validator\NotEmpty;
 class Import implements InputFilterAwareInterface
 {
     
-    protected $inputFilter; 
+    protected $inputFilter;
+    
+    //Different Change
+    public $test12; 
 
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
