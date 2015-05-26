@@ -105,7 +105,6 @@ $(document).ready(function() {
     
     //Generate Reply Form
     $(document).on('click', '.post-message a.post-reply', function(e) {
-        debugger;
         e.preventDefault();
         var postParentId = $(this).closest(".post-message-container>ul>li")
                         .attr("id");
