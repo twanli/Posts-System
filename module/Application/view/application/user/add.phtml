@@ -23,7 +23,7 @@
 
 <div class="form-group">
     <?php
-        $element = $form->get('username');
+        $element = $form->get('user_name');
         $element->setAttribute('id', 'username')
                 ->setAttribute('class', 'form-control')
                 ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
@@ -31,8 +31,8 @@
         print '<div class="col-sm-5">';
         print $this->formText($element);
         print '</div>';
-        if(isset($errMsg['username'])) {
-            print $this->errorHelper($errMsg['username']);
+        if(isset($errMsg['user_name'])) {
+            print $this->errorHelper($errMsg['user_name']);
         }
     ?>
 </div>
@@ -46,7 +46,7 @@
               $selectValue = $role->user_roles_id; 
            }  
         }
-        $element = $form->get('role');
+        $element = $form->get('user_role');
         $element->setAttribute('id', 'role')
                 ->setAttribute('class', 'form-control')
                 ->setAttribute('options', $selectOptions)
@@ -61,7 +61,7 @@
 
 <div class="form-group">
     <?php
-        $element = $form->get('password');;
+        $element = $form->get('user_password');;
         $element->setAttribute('id', 'password')
                 ->setAttribute('class', 'form-control')
                 ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
@@ -93,7 +93,7 @@
 </div>
 <div class="form-group">
     <?php
-        $element = $form->get('active');;
+        $element = $form->get('user_active');;
         $element->setAttribute('id', 'active')
                 ->setAttribute('class', 'form-control')
                 ->setAttribute('checked', 'checked')

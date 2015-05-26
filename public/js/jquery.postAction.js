@@ -6,41 +6,38 @@
         //var config = settings;
         
         var plugin = this;
-       var allFiles = [];
+        var allFiles = [];
         
-        
-        /*plugin.init = function() {
-            if (config.like == null || config.postId == null || 
-                config.sessionUserId == null || config.postType == null) {
-                return false;
-            }
-        }*/
-        
-        /*plugin.uploadInit = function() {
-            var fileselect = document.getElementById("fileselect");
-            
-            // file select
-            fileselect.addEventListener("change", 
-            plugin.fileSelectHandler, false);           
-        }*/
-        
-        /*plugin.fileSelectHandler = function(e) {
-            //debugger;
-            // cancel event and hover styling
-            //FileDragHover(e);
+        plugin.dragDropFiles = function(event) {
+            event.preventDefault();
 
-            // fetch FileList object
-            var files = e.target.files || e.dataTransfer.files;
+            var i = 0,
+                files = event.dataTransfer.files,
+                len = files.length;
 
-            // process all File objects
             for (var i = 0, f; f = files[i]; i++) {
-                plugin.parseFile(f);
-                allFiles.push(f);
-                //plugin.uploadFile(f);
-            }
+                plugin.parseFile(f, "n");
+                allFiles.push(f);            
+            }        
+        }
+        plugin.dragDropFilesDeleg = function(event) {
+            var i = 0,
+                files = event.originalEvent.dataTransfer.files,
+                len = files.length;
 
-        }*/
-        
+            for (var i = 0, f; f = files[i]; i++) {
+                plugin.parseFile(f, "r");
+                allFiles.push(f);            
+            }
+       }        
+        plugin.prepareDownload = function(e, postType) {
+            var files = e.target.files || e.dataTransfer.files;
+            
+            for (var i = 0, f; f = files[i]; i++) {
+                plugin.parseFile(f, postType);
+                allFiles.push(f);            
+            }
+        }       
         plugin.fileSize  = function(size) {
             var BYTE = 1;
             var KB = 1024;
@@ -63,7 +60,8 @@
                 return "<strong>1</strong> GByte";
             }
         }
-                // output file information
+        
+        // output file information
         plugin.parseFile = function(file, postType) {
             var typ = file.type;
             if ((file.type.indexOf("image") == 0 && file.type != "image/bmp")
@@ -164,11 +162,8 @@
         // upload JPEG files
         plugin.uploadFiles = function(files, postId) {
             
-            
             var postForm = document.getElementById("post-form");
-            
-            
-                for (var i = 0, f; f = files[i]; i++) {
+            for (var i = 0, f; f = files[i]; i++) {
  
                     var xhr = new XMLHttpRequest();
                     if (xhr.upload) {
@@ -176,7 +171,7 @@
                         xhr.setRequestHeader("X-FILENAME", f.name);
                         xhr.send(f);
                     }
-                }
+            }
             
         }
         
@@ -188,9 +183,7 @@
             if (xhr.upload) {
                 xhr.open("POST", postForm.action, true);
                 xhr.setRequestHeader("X-FILENAME", file.name);
-                //xhr.send(file);
             }
-        
         } 
         
         plugin.init = function() {
@@ -200,11 +193,22 @@
             plugin.initializePostsScroll();
         }
         
-        plugin.addPost = function(formData, postType) {
+        plugin.addPost = function(data, postType) {
+            
+            var formData = new FormData();
+            $.each(allFiles, function(key, value)
+            {
+                formData.append(key, value);
+            });
+            $.each(data, function(key, value) {
+                formData.append(key, value);
+            });
+            
+            allFiles = [];
             
             $.ajax({
                 type: 'POST',
-                url: "http://zf2.localhost/post/add",
+                url: baseUrl + "/post/add",
                 data: formData,                
                 processData: false, // Don't process the files
                 contentType: false,
@@ -272,10 +276,23 @@
                 }});
         }
         
+        plugin.editPostPrepare = function(msgDiv) {
+            var content = msgDiv.html();
+            var button = 
+                $("<div class='row'><div class='col-sm-12'><button type='submit' name='edit-button' class='btn btn-default'>Confirm Edit</button></div></div>");
+            msgDiv.after(button);
+            
+            var editableText = 
+                $("<textarea>"+$.trim(content)+"</textarea>");
+           
+            msgDiv.replaceWith(editableText);
+            editableText.focus();
+        }
+        
         plugin.editPost = function(postId, msg) {
             $.ajax({
                 type: 'POST',
-                url: "http://zf2.localhost/post/edit",
+                url: baseUrl + "/post/edit",
                 data: {postId: postId, msg: msg},                
                 dataType: "json",
                 error : function() {
@@ -331,13 +348,13 @@
             
             $.ajax({
                 type: 'POST',
-                url: "http://zf2.localhost/post/getGroupsCount",
+                url: baseUrl + "/post/getGroupsCount",
                 dataType: "json",
 
                 success: function(data){
                     total_groups = data.totalGroups;
                 }});            
-            $('.post-message-container>ul').load("http://zf2.localhost/post/autoload", {'group_no':track_load}, function() {
+            $('.post-message-container>ul').load(baseUrl + "/post/autoload", {'group_no':track_load}, function() {
                 track_load++;
                 /*$('.message-body').hide();
                 $('a[rel="edit-post"]').hide();*/
@@ -354,7 +371,7 @@
                         
                         //load data from the server using a HTTP POST request
                         var ur = track_load;
-                        $.post('http://zf2.localhost/post/autoload',{'group_no': track_load}, function(data){
+                        $.post(baseUrl + '/post/autoload',{'group_no': track_load}, function(data){
                                             
                             $(".post-message-container>ul").append(data); //append received data into the element
 
@@ -389,7 +406,7 @@
             //alert('test');
             $.ajax({
                 type: 'POST',
-                url: "http://zf2.localhost/like",
+                url: baseUrl + "/like",
                 data: {
                        like: config.like,                       
                        postId: config.postId,

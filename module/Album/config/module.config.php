@@ -46,7 +46,8 @@ return array(
     ),
     'view_helpers' => array(
         'invokables'=> array(
-            'errorHelper' => 'Album\View\Helper\ErrorHelper'  
+            'errorHelper' => 'Album\View\Helper\ErrorHelper',
+            'sortHelper'  => 'Album\View\Helper\SortHelper' 
         )
     ),
 );

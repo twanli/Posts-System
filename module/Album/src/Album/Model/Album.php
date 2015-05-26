@@ -6,9 +6,9 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\InputFilter\FileInput;
-use \Zend\Validator\File\UploadFile;
-use \Zend\Validator\File\Size;
-use \Zend\Validator\File\Extension;
+use Zend\Validator\File\UploadFile;
+use Zend\Validator\File\Size;
+use Zend\Validator\File\Extension;
 use Zend\Validator\Identical;
 use Album\Model\AlbumFiles;
 
@@ -16,27 +16,20 @@ use \Zend\Validator\NotEmpty;
 
 class Album implements InputFilterAwareInterface
 {
-    public $id;    
-    public $artist;
-    public $title;
-    public $img;
+    public $album_id;    
+    public $album_artist;
+    public $album_title;
+    public $album_img;
 
-    public $imgTest;
-    public $imgTest2;
-    public $imgTest3;
-
-    
     protected $inputFilter; 
 
     public function exchangeArray($data)
     {
-        //DebugBreak();
-        $this->id     = (!empty($data['id'])) ? $data['id'] : null;
-        $this->artist = (!empty($data['artist'])) ? $data['artist'] : null;
-        $this->title  = (!empty($data['title'])) ? $data['title'] : null;
-        $this->img    = (!empty($data['img'])) ? $data['img']: null;        
-        //......
-        //$this->img
+        $this->album_id     = (!empty($data['album_id'])) ? $data['album_id'] : null;
+        $this->album_artist = (!empty($data['album_artist'])) ? $data['album_artist'] : null;
+        $this->album_title  = (!empty($data['album_title'])) ? $data['album_title'] : null;
+        $this->album_img    = (!empty($data['album_img'])) ? 
+                                    $data['album_img']: null;        
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -50,30 +43,18 @@ class Album implements InputFilterAwareInterface
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
 
-
-
             $inputFilter->add(array(
-             'name'     => 'artist',
+             'name'     => 'album_artist',
              'required' => true,
              'filters'  => array(
                  array('name' => 'StripTags'),
                  array('name' => 'StringTrim'),
              ),
 
-             /*'validators' => array(
-                 array(
-                     'name'    => 'StringLength',
-                     'options' => array(
-                         'encoding' => 'UTF-8',
-                         'min'      => 1,
-                         'max'      => 100,
-                     ),
-                 ),
-             ),*/
             ));
 
             $inputFilter->add(array(
-             'name'     => 'title',
+             'name'     => 'album_title',
              'required' => true,
              'filters'  => array(
                  array('name' => 'StripTags'),
@@ -91,27 +72,6 @@ class Album implements InputFilterAwareInterface
              ),
             ));
  
-/*
-            /*$inputFilter->add(
-                array(
-                    'name' => 'fileupload',
-                    'required' => false,
-                    'validators' => array(
-                        
-                        array(
-                            'name' => 'Extension',
-                            'options' => array(
-                                'extension' => 'png',
-                                'messages' => array(
-                                    \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Please enter a valid file.',
-                                ),
-                            ),
-
-                        )
-                    )
-                )
-            );*/
-            
             $inputFilter->add(array(
                   'name' => 'fileupload',
                   'required' => false,
@@ -126,32 +86,9 @@ class Album implements InputFilterAwareInterface
                                 'max' => 5000000,                                
                             )
                       ),
-    
-                      )
-                      
+                  )
+            ));
 
-                )
-                   
-             );
-             /*$inputFilter->add(array(
-                  'name' => 'img',
-                  //'required' => false,
-                  //'allow_empty' => true,
-                  'validators' => array(
-                      
-                      new Identical('default.png')
-                      ),
-                      /*new Size(array(
-                                'max' => 5000000,                                
-                            )
-                      ),
-    
-                      
-                      
-
-                )
-                   
-             ); */
 
             $this->inputFilter = $inputFilter;
         }

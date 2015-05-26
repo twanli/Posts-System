@@ -9,20 +9,22 @@ class UserForm extends Form
     {
         // we want to ignore the name passed
         parent::__construct('adduser');
-
+        $this->setAttribute('method', 'post');
+        //$this->setMethod('post');
+        
         $this->add(array(
-            'name' => 'id',
+            'name' => 'user_id',
             'type' => 'Hidden',
         ));
         $this->add(array(
-            'name' => 'username',
+            'name' => 'user_name',
             'type' => 'Text',
             'options' => array(
                 'label' => 'User Name:',
             ),
         ));
         $this->add(array(
-            'name' => 'role',
+            'name' => 'user_role',
             'type' => 'Select',
             
             'attributes' =>  array(
@@ -35,7 +37,7 @@ class UserForm extends Form
             ),
         ));
         $this->add(array(
-            'name' => 'password',
+            'name' => 'user_password',
             'type' => 'Password',
             'options' => array(
                 'label' => 'Password:',
@@ -50,7 +52,7 @@ class UserForm extends Form
         ));
 
         $this->add(array(
-            'name' => 'active',
+            'name' => 'user_active',
             'type' => 'Checkbox',
             'options' => array(
                 'label' => 'Active ?',

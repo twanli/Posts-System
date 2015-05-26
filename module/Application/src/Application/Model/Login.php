@@ -6,13 +6,13 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\InputFilter\FileInput;
-use \Zend\Validator\File\UploadFile;
-use \Zend\Validator\File\Size;
-use \Zend\Validator\File\Extension;
+use Zend\Validator\File\UploadFile;
+use Zend\Validator\File\Size;
+use Zend\Validator\File\Extension;
 use Zend\Validator\Identical;
 
 
-use \Zend\Validator\NotEmpty;
+use Zend\Validator\NotEmpty;
 
 class Login implements InputFilterAwareInterface
 {

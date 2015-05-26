@@ -21,6 +21,7 @@ class UserRole
     const USERS_INDEX = "user:index";
     const USERS_DEL = "user:delete";
     const USERS_EDIT = "user:edit";
+    const USERS_MANAGE_ACC = "user:manageAcc";
     const USERS_ADD = "user:add";
     const USERS_GEN_PASSWORD = "user:genPassword";
     
@@ -45,6 +46,7 @@ class UserRole
              ->addResource(self::USERS_ADD)
              ->addResource(self::USERS_EDIT)
              ->addResource(self::USERS_DEL)
+             ->addResource(self::USERS_MANAGE_ACC)
              ->addResource(self::ALBUMS_ADD)
              ->addResource(self::ALBUMS_EDIT)
              ->addResource(self::ALBUMS_DEL)
@@ -94,9 +96,12 @@ class UserRole
          
     public function exchangeArray($data)
     {
-        $this->user_roles_id       = (!empty($data['user_roles_id'])) ? $data['user_roles_id'] : null;
-        $this->user_roles_role     = (!empty($data['user_roles_role'])) ? $data['user_roles_role'] : null;
-        $this->user_roles_name     = (!empty($data['user_roles_name'])) ? $data['user_roles_name'] : null;
+        $this->user_roles_id       = (!empty($data['user_roles_id'])) ? 
+                                        $data['user_roles_id'] : null;
+        $this->user_roles_role     = (!empty($data['user_roles_role'])) ? 
+                                        $data['user_roles_role'] : null;
+        $this->user_roles_name     = (!empty($data['user_roles_name'])) ? 
+                                        $data['user_roles_name'] : null;
     }
     
     

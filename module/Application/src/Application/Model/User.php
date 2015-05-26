@@ -7,13 +7,14 @@ use Zend\InputFilter\InputFilterInterface;
 
 class User implements InputFilterAwareInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $role;
-    public $active;
-    public $name;
+    const GEN_PASS_LENGHT = 8;
     
+    public $user_id;
+    public $user_name;
+    public $user_password;
+    public $user_role;
+    public $user_active;
+
     protected $inputFilter; 
     
     protected static $userRoles = array("superadmin" => "Super Administartor",
@@ -27,11 +28,16 @@ class User implements InputFilterAwareInterface
                        
     public function exchangeArray($data)
     {
-        $this->id       = (!empty($data['id'])) ? $data['id'] : null;
-        $this->username = (!empty($data['username'])) ? $data['username'] : null;
-        $this->password = (!empty($data['password'])) ? ($data['password']) : null;
-        $this->role     = (!empty($data['role'])) ? $data['role'] : null;
-        $this->active   = ($data['active']!=null) ? $data['active'] : null;        
+        $this->user_id       = (!empty($data['user_id'])) ? 
+                                $data['user_id'] : null;
+        $this->user_name     = (!empty($data['user_name'])) ? 
+                                $data['user_name'] : null;
+        $this->user_password = (!empty($data['user_password'])) ? 
+                                ($data['user_password']) : null;
+        $this->user_role     = (!empty($data['user_role'])) ? 
+                                $data['user_role'] : null;
+        $this->user_active   = ($data['user_active']!=null) ? 
+                                $data['user_active'] : null;        
     }
     
     // Add content to these methods:
@@ -40,15 +46,18 @@ class User implements InputFilterAwareInterface
         throw new \Exception("Not used");
     }
     
+    public static function genPassword()
+    {
+        return substr(md5(uniqid(mt_rand(), true)), 
+                        0, self::GEN_PASS_LENGHT);
+    }
     public function getInputFilter()
      {
          if (!$this->inputFilter) {
              $inputFilter = new InputFilter();
 
-
-
              $inputFilter->add(array(
-                 'name'     => 'username',
+                 'name'     => 'user_name',
                  'required' => true,
                  'filters'  => array(
                      array('name' => 'StripTags'),
@@ -67,7 +76,7 @@ class User implements InputFilterAwareInterface
              ));
 
              $inputFilter->add(array(
-                 'name'     => 'password',
+                 'name'     => 'user_password',
                  'required' => false,
                  'filters'  => array(
                      array('name' => 'StripTags'),
@@ -87,10 +96,6 @@ class User implements InputFilterAwareInterface
              $inputFilter->add(array(
                  'name'     => 'repeat_password',
                  'required' => false,
-                 /*'filters'  => array(
-                     array('name' => 'StripTags'),
-                     array('name' => 'StringTrim'),
-                 ),*/
                  'validators' => array(
                      array(
                          'name'    => 'StringLength',
@@ -103,14 +108,14 @@ class User implements InputFilterAwareInterface
                      array(
                         'name'    => 'Identical',
                         'options' => array(
-                            'token' => 'password',
+                            'token' => 'user_password',
                         ),
                      ),
                      
                  ),
              ));
              $inputFilter->add(array(
-                 'name'     => 'role',
+                 'name'     => 'user_role',
                  'required' => false,
              ));
           

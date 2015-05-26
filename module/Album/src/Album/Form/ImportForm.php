@@ -46,8 +46,5 @@ class ImportForm extends Form
          ),
         ));
     }
-    
-
-
 }    
 ?>

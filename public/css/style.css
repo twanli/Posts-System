@@ -322,6 +322,10 @@ a[rel='edit-post'] {
 .animation_image {
     display: none;
 }
+.navbar-header {
+    position: relative;
+    z-index: 10;
+}
 
 
 

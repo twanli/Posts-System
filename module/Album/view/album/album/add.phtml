@@ -1,8 +1,6 @@
 <?php
     use Zend\Form\Element;
-    //DebugBreak();
     $errMsg = $form->getMessages();
-    //DebugBreak();
     $title = 'Add album';
     $this->headTitle($title);
 ?>               
@@ -21,7 +19,7 @@
            
 <div class="form-group">
     <?php
-        $element = $form->get('title');
+        $element = $form->get('album_title');
         $element->setLabel('Title:')
                 ->setAttribute('id', 'title')
                 ->setAttribute('class', 'form-control')
@@ -30,15 +28,15 @@
         print '<div class="col-sm-5">';
         print $this->formText($element);
         print '</div>';
-        if(isset($errMsg['title'])) {
-            print $this->errorHelper($errMsg['title']);
+        if(isset($errMsg['album_title'])) {
+            print $this->errorHelper($errMsg['album_title']);
         }
         
     ?>
 </div>
 <div class="form-group">
     <?php
-        $element = $form->get('artist');;
+        $element = $form->get('album_artist');;
         $element->setLabel('Artist:')
                 ->setAttribute('id', 'artist')
                 ->setAttribute('class', 'form-control')
@@ -47,8 +45,8 @@
         print '<div class="col-sm-5">';
         print $this->formText($element);
         print '</div>';
-        if(isset($errMsg['artist'])) {
-            print $this->errorHelper($errMsg['artist']);
+        if(isset($errMsg['album_artist'])) {
+            print $this->errorHelper($errMsg['album_artist']);
         }
              
     ?>

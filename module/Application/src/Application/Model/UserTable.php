@@ -26,7 +26,8 @@ class UserTable
     {
         $select = new Select('users');
         $select->columns(array('*'));
-        $select->join('user_roles', 'users.role = user_roles.user_roles_id');
+        $select->join('user_roles', 
+        'users.user_role = user_roles.user_roles_id');
         
         $sql = new Sql($this->adapter);
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -48,7 +49,7 @@ class UserTable
     public function getUser($id)
     {
         $id  = (int) $id;
-        $rowset = $this->tableGateway->select(array('id' => $id));
+        $rowset = $this->tableGateway->select(array('user_id' => $id));
         $row = $rowset->current();
         if (!$row) {
             throw new \Exception("Could not find row $id");
@@ -62,8 +63,9 @@ class UserTable
         
         $select = new Select('users');
         $select->columns(array('*'));
-        $select->join('user_roles', 'users.role = user_roles.user_roles_id', array('user_roles_name'));
-        $select->where(array('id' => $id));
+        $select->join('user_roles', 'users.user_role = user_roles.user_roles_id'
+                    , array('user_roles_name'));
+        $select->where(array('user_id' => $id));
         
         $sql = new Sql($this->adapter);
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -85,8 +87,8 @@ class UserTable
         $select->where */
         $select = new Select('users');
         $select->columns(array('*'));
-        $select->join('user_roles', 'users.role = user_roles.user_roles_id');
-        $select->where(array('username' => $username));
+        $select->join('user_roles', 'users.user_role = user_roles.user_roles_id');
+        $select->where(array('user_name' => $username));
         
         $sql = new Sql($this->adapter);
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -101,32 +103,32 @@ class UserTable
     
     public function saveUser(User $user)
     {
-        if(empty($user->password)) {
+        if(empty($user->user_password)) {
             $data = array(
-                'username'  => $user->username,
-                'role'      => $user->role,
-                'active'    => $user->active,
+                'user_name'      => $user->user_name,
+                'user_role'      => $user->user_role,
+                'user_active'         => $user->user_active,
             );
             
         } else {
             $data = array(
-                'username'  => $user->username,
-                'password'  => md5($user->password),
-                'role'      => $user->role,
-                'active'    => $user->active,
+                'user_name'  => $user->user_name,
+                'user_password'  => md5($user->user_password),
+                'user_role'      => $user->user_role,
+                'user_active'    => $user->user_active,
             );
         }
         
-        if (empty($data['password'])) {
-            unset($data['password']); 
+        if (empty($data['user_password'])) {
+            unset($data['user_password']); 
         }
-        if (empty($data['role'])) {
-            unset($data['role']);  
+        if (empty($data['user_role'])) {
+            unset($data['user_role']);  
         }
-        if (empty($data['active'])) {
-            unset($data['active']);  
+        if (empty($data['user_active'])) {
+            unset($data['user_active']);  
         }        
-        $id = (int) $user->id;
+        $id = (int) $user->user_id;
         if ($id == 0) {
    
             try {
@@ -138,7 +140,7 @@ class UserTable
         } else {
             if ($this->getUser($id)) {
                 
-                $this->tableGateway->update($data, array('id' => $id));
+                $this->tableGateway->update($data, array('user_id' => $id));
             } else {
                 throw new \Exception('User id does not exist');
             }
@@ -147,7 +149,7 @@ class UserTable
 
     public function deleteUser($id)
     {
-        $this->tableGateway->delete(array('id' => (int) $id));
+        $this->tableGateway->delete(array('user_id' => (int) $id));
     }
  }  
 ?>

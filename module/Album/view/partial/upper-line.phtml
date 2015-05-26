@@ -1,0 +1,143 @@
+<?php
+    use Application\Model\UserRole;
+    use Zend\Form\Element;    
+?>
+
+ <div class="row head-line">
+    <div class="col-sm-4 ">
+        <?php if ($this->acl->isAllowed($this->userSession->role, 
+                  UserRole::ALBUMS_ADD)) :  ?>            
+        <span class="site-nav">
+            <a 
+                href="<?php print $this->url('album', array('action'=>'add'));?>">
+                Add new album
+            </a>
+        </span>
+        <div class="clearfix"></div>   
+        <?php endif; ?>
+    </div>
+    <div class="col-sm-4 import">
+        <?php
+            if ($this->acl->isAllowed($userSession->role, UserRole::ALBUMS_IMPORT)) { 
+
+                 $this->importForm->setAttribute('action', 
+                                            $this->url('album', array('action' => 'index')));
+                 $this->importForm->setAttribute('class', 'form-horizontal');
+                 $this->importForm->setAttribute('role', 'form');
+                 $this->importForm->prepare();
+
+                 print $this->form()->openTag($this->importForm);
+                 print $this->formHidden($this->importForm->get('importform'));
+        ?>
+     <div class="form-group">
+         <?php
+            
+            //print '<div class="col-sm-offset-2 col-sm-5">';
+            $element = $this->importForm->get('zipupload');
+            $element->setLabel('Import CSV/XML (As Zip File):'.
+                                '(CSV fields should be seperated by comma)')
+                    ->setLabelAttributes(array('class' => 'control-label'))
+                    ->setAttribute('class', 'form-control');
+            
+            print $this->formLabel($element);
+            print '<div class="row">';
+            print '<div class="col-sm-8">';
+            print $this->formFile($element);
+            print '</div>';
+
+            $element = new Element\Button('edit-button');
+            $element->setLabel("Confirm")
+                    ->setAttribute("type","submit")
+                    ->setAttribute("class","btn btn-default");
+            print '<div class="col-sm-4">';
+            print $this->formButton($element);
+            print '</div>';
+            if(isset($errMsg['zipupload'])) {
+                print $this->errorHelper($errMsg['zipupload']);
+            }
+            print '</div>';
+           
+            print $this->form()->closeTag();
+        
+        ?>  
+    
+    </div>
+    <?php } ?>
+    </div>
+    <div class="col-sm-4">
+
+     <?php
+         if($this->orderby==null) {
+             $url = $this->url('album', array('action' => 'index'));
+         } else {
+             $url = $this->url('sort', 
+                                array('orderby'=>$this->orderby, 
+                                      'way'=>$this->way));
+         }
+         $this->exportForm->setAttribute('action', $url);
+         $this->exportForm->setAttribute('class', 'form-horizontal');
+         $this->exportForm->setAttribute('role', 'form');
+         $this->exportForm->prepare();
+
+         echo $this->form()->openTag($this->exportForm);
+         echo $this->formHidden($this->exportForm->get('exportform'));
+
+     ?>
+     <div class="form-group">
+         <?php
+            $element = $this->exportForm->get('exportformat');
+            $element->setAttribute('class', 'form-control')
+                    ->setLabel('Export To:')
+                    ->setLabelAttributes(array('class' => 'col-sm-8 control-label'));
+            print $this->formLabel($element);
+            print '<div class="col-sm-4">';
+            print $this->formSelect($element);
+            print '</div>';    
+        ?> 
+     </div>
+     <?php
+        print '<div class="col-sm-offset-9 col-sm-3">';
+        
+        $element = new Element\Button('edit-button');
+        $element->setLabel("Confirm")
+                ->setAttribute("type","submit")
+                ->setAttribute("class","btn btn-default");
+        print $this->formButton($element);
+        print '</div>'; 
+        print $this->form()->closeTag();  
+    ?>
+    </div>
+
+ </div>
+<div class="row"> 
+    <div class="search-form col-sm-offset-8 col-sm-4">
+        <?php
+            $this->searchForm->setAttribute('action', $this->url('album', array('action' => 'index')));
+            $this->searchForm->setAttribute('class', 'form-horizontal');
+            $this->searchForm->setAttribute('role', 'form');
+            $this->searchForm->prepare();
+
+            print $this->form()->openTag($this->searchForm);
+            print $this->formHidden($this->searchForm->get('searchform'));
+        ?>
+        <div class="form-group row">
+            <?php
+                $element = $this->searchForm->get('search');
+                $element->setAttribute('id', 'search')
+                        ->setAttribute('class', 'form-control')
+                        ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
+                print '<div class="col-sm-9">';
+                print $this->formText($element);
+                print '</div>';
+                $element = new Element\Button('search-button');
+                $element->setLabel("Search")
+                        ->setAttribute("type","submit")
+                        ->setAttribute("class","btn btn-default");
+                print '<div class="col-sm-3">';
+                print $this->formButton($element);    
+                print '</div>';  
+                
+            ?>
+        </div>
+    </div>
+</div>

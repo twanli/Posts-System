@@ -21,25 +21,25 @@ class AlbumForm extends Form
         parent::__construct('album');
 
         $this->add(array(
-         'name' => 'id',
-         'type' => 'Hidden',
+            'name' => 'album_id',
+            'type' => 'Hidden',
         ));
         $this->add(array(
-         'name' => 'title',
-         'type' => 'Text',
-         'options' => array(
-             'label' => 'Title',
-         ),
+            'name' => 'album_title',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'Title',
+            ),
         ));
         $this->add(array(
-         'name' => 'artist',
-         'type' => 'Text',
-         'options' => array(
+            'name' => 'album_artist',
+            'type' => 'Text',
+            'options' => array(
              'label' => 'Artist',
-         ),
+            ),
         ));
         $this->add(array(
-         'name' => 'img',
+         'name' => 'album_img',
          'type' => 'Hidden',
         ));
         $this->add(array(
@@ -57,17 +57,12 @@ class AlbumForm extends Form
              'id' => 'submitbutton',
          ),
         ));
-        
-        
-        
-
     }
     
     public function setValues($rec)
     {
         foreach ($rec as $field => $value) {
-            //if($field != "img")
-                $this->get($field)->setValue($value);
+            $this->get($field)->setValue($value);
         }  
     }
     
@@ -76,25 +71,23 @@ class AlbumForm extends Form
         $imageFileType = pathinfo(basename($img),PATHINFO_EXTENSION);
         $filename = $uniqueToken .'.'.$imageFileType;
         
-
         $upload = new \Zend\File\Transfer\Adapter\Http();
         
         $uploadPath = ROOT_PATH . '/public/img/albums/';
     
-        $filterRename = new \Zend\Filter\File\Rename(array('target' => $uploadPath . $filename, 'overwrite' => false));
+        $filterRename = new \Zend\Filter\File\Rename(
+            array('target' => $uploadPath . $filename, 
+                'overwrite' => false));
         $upload->addFilter($filterRename);
 
         if ($upload->receive()) {
             $this->resizeImage($uploadPath.$filename, $uploadPath.$filename);
             return $filename;
-
         } else {
             return false;
         }
     }  
 
-    
-    
     private function resizeImage($source = '', $destination = '')
     {
         if (empty($source)) {
@@ -106,6 +99,5 @@ class AlbumForm extends Form
         $size  = $image->getSize()->widen(self::RESIZEWIDTH);
         $image->resize($size)->save($destination);
     }
-
 }    
 ?>

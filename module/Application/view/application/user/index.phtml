@@ -27,10 +27,10 @@
     ?>
     
     <tr>
-     <td><?php print $this->escapeHtml($user['username']);?></td>
+     <td><?php print $this->escapeHtml($user['user_name']);?></td>
      <td class="text-data"><?php print $this->escapeHtml($user['user_roles_name']);?></td>
      <td class="text-data">
-     <?php if ($user['active'] == true) {
+     <?php if ($user['user_active'] == true) {
                 print 'Yes';
             } else {
                 print 'No';                
@@ -38,16 +38,16 @@
      </td>
      <td class="edit-link">
          <a href="<?php print $this->url('users',
-             array('action' => 'edit', 'id' => $user['id']));?>">Edit</a>
+             array('action' => 'edit', 'id' => $user['user_id']));?>">Edit</a>
          <a href="<?php print $this->url('users',
-             array('action' => 'genPassword', 'id' => $user['id']));?>">Generate new password</a>
+             array('action' => 'genPassword', 'id' => $user['user_id']));?>">Generate new password</a>
          <?php                
             $userRole = new UserRole();
                                 
             if($user['user_roles_role'] != UserRole::ROLE_SUPERADMIN) {
          ?>       
              <a href="<?php print $this->url('users',
-                 array('action' => 'delete', 'id' => $user['id']));?>" rel="delete">Delete</a>
+                 array('action' => 'delete', 'id' => $user['user_id']));?>" rel="delete">Delete</a>
          <?php
             }   
          ?>

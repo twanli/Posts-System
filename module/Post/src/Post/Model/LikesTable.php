@@ -35,9 +35,9 @@
 
         $select->where(array('like_post_id' => $postId));
 
-        $select->join('users', 'users.id = likes.like_user_id'
+        $select->join('users', 'users.user_id = likes.like_user_id'
                  , array('post_like_usernames' => 
-                  new Expression('GROUP_CONCAT(users.username)'))
+                  new Expression('GROUP_CONCAT(users.user_name)'))
                  );
   
 
@@ -58,7 +58,7 @@
      public function getLike($id)
      {
          $id  = (int) $id;
-         $rowset = $this->tableGateway->select(array('id' => $id));
+         $rowset = $this->tableGateway->select(array('like_id' => $id));
          $row = $rowset->current();
          if (!$row) {
              throw new \Exception("Could not find row $id");
@@ -78,7 +78,7 @@
              $this->tableGateway->insert($data);
          } else {
              if ($this->getLike($id)) {
-                 $this->tableGateway->update($data, array('id' => $id));
+                 $this->tableGateway->update($data, array('like_id' => $id));
              } else {
                  throw new \Exception('Like id does not exist');
              }

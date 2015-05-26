@@ -18,7 +18,7 @@
             <div class="message-head">
                 <div class="row">
                     <div class="col-sm-2">
-                        <img src="<?php print "/img/users/".$message['post_username_img']; ?>" 
+                        <img src="<?php print $this->basePath("img/users/".$message['post_username_img']); ?>" 
                              alt="<?php print $message['post_username']; ?>"
                         >                    
                     </div>
@@ -99,7 +99,7 @@
                                        $images[] = $new;     
                                     }
                                     print "<a class='".$fileType."' 
-                                            href='/posts/".$new."'
+                                            href='".$this->basePath("/posts/".$new)."'
                                             target='_self' 
                                             download>".$old.
                                     "</a>";
@@ -118,10 +118,11 @@
                         <div class="img-files col-sm-12">
                             <?php
                                  foreach ($images as $img) {
-                                     print "<a class='fancybox' href='/posts/".$img."'       
+                                     print "<a class='fancybox' href='
+                                            ".$this->basePath('/posts/'.$img)."'       
                                             target='_self'>";
                                      print "<img  
-                                            src='/posts/".$img."'
+                                            src='".$this->basePath('/posts/'.$img)."'
                                             alt='".$img."' 
                                             />";
                                      print "</a>";                                 

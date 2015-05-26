@@ -29,7 +29,8 @@
             }
             if($selectParamsSession->offsetExists('searchStr')) {
                $search =  $selectParamsSession->searchStr;
-               $select->where->like('artist', '%'.$search.'%')->or->like('title', '%'.$search.'%');
+               $select->where->like('album_artist', '%'.$search.'%')->
+                    or->like('album_title', '%'.$search.'%');
             }
             
             if ($paginated) {
@@ -57,7 +58,7 @@
         public function getAlbum($id)
         {
             $id  = (int) $id;
-            $rowset = $this->tableGateway->select(array('id' => $id));
+            $rowset = $this->tableGateway->select(array('album_id' => $id));
             $row = $rowset->current();
             if (!$row) {
              throw new \Exception("Could not find row $id");
@@ -68,17 +69,17 @@
         public function saveAlbum(Album $album)
         {
             $data = array(
-             'artist' => $album->artist,
-             'title'  => $album->title,
-             'img'    => $album->img
+             'album_artist' => $album->album_artist,
+             'album_title'  => $album->album_title,
+             'album_img'    => $album->album_img
             );
 
-            $id = (int) $album->id;
+            $id = (int) $album->album_id;
             if ($id == 0) {
             $this->tableGateway->insert($data);
             } else {
                 if ($this->getAlbum($id)) {
-                     $this->tableGateway->update($data, array('id' => $id));
+                     $this->tableGateway->update($data, array('album_id' => $id));
                 } else {
                      throw new \Exception('Album id does not exist');
                 }
@@ -87,7 +88,7 @@
 
         public function deleteAlbum($id)
         {
-            $this->tableGateway->delete(array('id' => (int) $id));
+            $this->tableGateway->delete(array('album_id' => (int) $id));
         }
 }
 ?>

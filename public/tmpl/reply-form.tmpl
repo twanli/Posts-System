@@ -1,0 +1,27 @@
+<form method='POST' name='post-reply-form' class='form-horizontal' role='form'>
+    <span>Replying to ${replyTo}</span>
+    <div class='form-group'>
+        <input type='hidden' name='post-parent-id' value='${postParentId}'/> 
+        <input type='hidden' name='post-reply-id' value='${postReplyId}'/>
+        <textarea name='post-reply' class='form-control' rows='5' 
+            placeholder='Write a reply ...'></textarea>
+    </div>
+    <div class='row action-buttons'>
+        <div class='col-sm-2'>
+            <button type='submit' name='add-button' class='btn btn-default'>
+            Add Post</button>
+        </div>
+        <div class='col-sm-5'>
+            <label for='fileselect'>Attach files:</label>
+        </div>
+        <div class='col-sm-5'>
+            <input type='file' name='fileselect[]' id='fileselect' multiple='multiple'>
+        </div>
+    </div>
+    <div class='row file-attachments'>
+        <div id='reply-img-attach' class='col-sm-7'></div>
+        <div id='reply-files-attach' class='col-sm-5'>
+            <span>You can drag & drop files here ..</span>
+        </div>
+    </div>
+</form>

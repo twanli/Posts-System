@@ -2,14 +2,14 @@
     namespace Application\Controller;
 
     use Zend\Mvc\Controller\AbstractActionController;
-    /*use Zend\Validator\File\Size; 
-    use Zend\Validator\File\Extension;*/  
     use Zend\Mvc\MvcEvent; 
     use Zend\View\Model\ViewModel;
+    use Zend\Session\Container;
+    use Zend\Http\Request; 
+    
     use Application\Model\User;
     use Application\Model\UserRole;
     use Application\Form\UserForm;
-    use Zend\Session\Container;     
     
     class UserController extends AbstractActionController
     {
@@ -36,7 +36,7 @@
         {
             $this->userSession     = new Container('user');
             $this->formDataSession = new Container('formData');
-            $this->userForm = new UserForm();
+            
             $this->roles = $this->getUserRoleTable()->fetchAll();
             
             $routeMatch = $e->getRouteMatch();
@@ -82,23 +82,23 @@
         */
         public function addAction()
         {
-            $this->userForm->get('submit')->setValue('Add User');
+            $userForm = new UserForm();
+            $userForm->get('submit')->setValue('Add User');
             
             $request = $this->getRequest();
             
             if ($request->isPost()) {
                 $user = new User();
-                
-                $this->userForm->setInputFilter($user->getInputFilter());
+                $userForm->setInputFilter($user->getInputFilter());
                 
                 $postData = $request->getPost();
-                $this->userForm->setData($postData);
+                $userForm->setData($postData);
 
-                if ($this->userForm->isValid()) {
-                    if (empty($postData['password']) && 
+                if ($userForm->isValid()) {
+                    if (empty($postData['user_password']) && 
                         $postData['gen_password'] == 0){
                         
-                        $this->userForm->get('gen_password')
+                        $userForm->get('gen_password')
                              ->setMessages(array('You should set a password!'));    
                     
                     } else {
@@ -107,7 +107,7 @@
                         * we redirect to related action and save form data there
                         */
                         try {
-                            $data=$this->userForm->getData();
+                            $data=$userForm->getData();
 
                             $user->exchangeArray($data);
                             $this->getUserTable()->saveUser($user);
@@ -119,15 +119,15 @@
                                 return $this->redirect()->toRoute('users');     
                             }
                         } catch (\Exception $e) {
-                            $this->userForm->get('username')
-                            ->setMessages(array('User '.$data['username'].
+                            $userForm->get('user_name')
+                            ->setMessages(array('User '.$data['user_name'].
                                                 ' allready exists.'));    
                         }
                     }
                 }               
             }
             
-            return array('form' =>  $this->userForm,
+            return array('form' =>  $userForm,
                          'roles' => $this->roles,
                          );
         }
@@ -138,46 +138,63 @@
         */        
         public function editAction()
         {
+            //DebugBreak();
             $id = $this->getRouteId(self::ADD);
             $user = $this->getUser($id);
 
-            $this->userForm->bind($user);
-            $this->userForm->get('submit')->setAttribute('value', 'Edit');
+            $userForm = new UserForm();
+            $userForm->bind($user);
+            $userForm->get('submit')->setAttribute('value', 'Edit');
 
             $request = $this->getRequest();
-            $postData = $request->getPost();
-            
-            if ($request->isPost()) {
-                $this->userForm->setInputFilter($user->getInputFilter());
-                $this->userForm->setData($postData);
 
-                if ($this->userForm->isValid()) {
-                    $this->getUserTable()->saveUser($user);
-                    
-                    /* Update user name in Admin panel (text 'username' is logged)
-                      if the name of Actual administrator was changed */
-                    $this->updateSessionUser($user);
-                    
-                    if ($postData['gen_password'] == true) {
-                        $this->generatePassword($id, self::EDIT);  
-                    }  else {
-                        $role = $this->userSession->role;
+            $postData = $request->getPost();
+            if ($request->isPost()) {
+                $userForm->setInputFilter($user->getInputFilter());
+                $userForm->setData($postData);
+
+                if ($userForm->isValid()) {
+                    try {
+                        $this->getUserTable()->saveUser($user);
                         
-                        if ($this->userSession->role 
-                            == UserRole::ROLE_SUPERADMIN) {
-                            return $this->redirect()->toRoute('users');                              
-                        } else {
-                            return $this->redirect()->toRoute('album');
-                        }   
+                        /* Update user name in Admin panel (text 'username' is logged)
+                          if the name of Actual administrator was changed */
+                        $this->updateSessionUser($user);
+                        
+                        if ($postData['gen_password'] == true) {
+                            $this->generatePassword($id, self::EDIT);  
+                        }  else {
+                            $role = $this->userSession->role;
+                            
+                            if ($this->userSession->role 
+                                == UserRole::ROLE_SUPERADMIN) {
+                                return $this->redirect()->toRoute('users');                              
+                            } else {
+                                return $this->redirect()->toRoute('album');
+                            }   
+                        }                        
+                    } catch (\Exception $e) {
+                        $userForm->get('user_name')
+                        ->setMessages(array('User '.$postData['user_name'].
+                                            ' allready exists.'));    
                     }
+
                 }
             }
 
             return array(
                 'id' => $id,
-                'form' => $this->userForm,
+                'form' => $userForm,
                 'roles' => $this->roles,
             );
+        }
+        
+        public function manageAccAction()
+        {
+            $id = $this->getRouteId(self::ADD);
+            return $this->redirect()->toRoute('users', 
+            array('action' => 'edit', 
+                  'id' => $id));   
         }
         
         /**
@@ -186,30 +203,24 @@
         */
         public function genPasswordAction ()
         {
-            //DebugBreak();
             $id = $this->params('id');
             $user     = $this->getUserTable()->getUser($id);
-            $userRole = $this->getUserRoleTable()->getUserRole($user->role);
-            
+            $userRole = $this->getUserRoleTable()->getUserRole($user->user_role);
             $action = $this->formDataSession->action;
-            $genPass = substr(md5(uniqid(mt_rand(), true)), 
-                        0, self::GEN_PASS_LENGHT);
             
-            $user->password = $genPass;
+            $user->user_password = User::genPassword();
             $this->getUserTable()->saveUser($user);
             
             return array('user' => $user,
                          'userRole' => $userRole,
-                         'genPass' => $genPass,
+                         'genPass' => $user->user_password,
                          'action' => $action);
         }
         
         public function deleteAction()
         {
             $id = $this->params('id');
-            
             $this->getUserTable()->deleteUser($id);
-            
             return $this->redirect()->toRoute('users');
         }
         
@@ -235,6 +246,12 @@
             return $this->userRoleTable;
         }
         
+        /**
+        * redirect to gen Password action
+        * 
+        * @param int $id
+        * @param string $action
+        */
         private function generatePassword($id=null, $action=null)
         {
             $this->formDataSession->action = $action;
@@ -244,6 +261,11 @@
                               'id' => $id));    
         }
         
+        /**
+        * Get Id from url route
+        * 
+        * @param string $action
+        */
         private function getRouteId($action = null)
         {
             $id = (int) $this->params()->fromRoute('id', 0);
@@ -256,6 +278,11 @@
             return $id;            
         }
         
+        /**
+        * Get User according to his id
+        * 
+        * @param int $id
+        */
         private function getUser($id = null)
         {
             try {
@@ -269,13 +296,19 @@
             return $user;
         }
         
+        /**
+        * Set in main admin panel new user name
+        * 
+        * @param mixed $user
+        */
         private function updateSessionUser($user=null)
         {
-            if($user->id == $this->userSession->id
-                && $user->username != $this->userSession->username) {
-                $this->userSession->username = $user->username;
+            if($user->user_id == $this->userSession->id
+                && $user->user_name != $this->userSession->username) {
+                $this->userSession->username = $user->user_name;
             }    
         }
+        
         /**
         * Validate ids from form (could be changed from browser by a hacker) 
         * if they are the same as userSession id

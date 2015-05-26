@@ -40,50 +40,6 @@ class PostController extends AbstractActionController
         $post = new Post();                     
         $form->get('submit')->setValue('Add Post');
 
-        
-        //Find users who likes this post
-        /*$completePosts = array();
-        foreach ($allPosts as $msg) {
-            $likes = $this->getPostLikeTable()->fetchAllLikes($msg['post_id']);
-            
-            $msg['post_like'] = array();
-            $msg['post_liked_you'] = false;
-            foreach ($likes as $like) {
-               $msg['post_like'][] = $like;
-               
-               if ($like == $this->userSession->username) {
-                   $msg['post_liked_you'] = true;
-               }
-            }
-            
-            if (is_array($msg['post_children'])) {
-                $children = $msg['post_children'];
-                $completeChildren = array();
-                
-                foreach($children as $child) {
-                    $likes = $this->getPostLikeTable()
-                                  ->fetchAllLikes($child['post_id']);
-                    
-                    foreach ($likes as $like) {
-                        $child['post_like'][] = $like;
-               
-                        if ($like == $this->userSession->username) {
-                            $child['post_liked_you'] = true;
-                        }
-                    }
-                    
-                    $completeChildren[] = $child;
-                }
-                
-                $msg['post_children'] = $completeChildren; 
-                
-                 
-            }
-            
-            $completePosts[] = $msg;
-        }*/
-        
-              
         return new ViewModel(array(
              'form' => $form,
              'userSession' => $this->userSession, 
@@ -91,17 +47,15 @@ class PostController extends AbstractActionController
     }
 
     
+    /**
+    * Add Post to system
+    * 
+    */
     public function addAction()
     {
-        //DebugBreak();
         $request = $this->getRequest();
         
         if ($request->isPost()) {
-
-            //$response = $this->getResponse();
-            //$message = $request->getPost('files');
-            /*$response->getHeaders()
-                     ->addHeaderLine( 'X-FILENAME', 'application/json' );*/
             $post = new Post();
             $message = $request->getPost('message');
 
@@ -179,7 +133,6 @@ class PostController extends AbstractActionController
                     }
 
                     //Upload attached files if exist
-                    
                     $uploaddir = ROOT_PATH . '/public/posts/';
                     foreach($files as $file)
                     {
@@ -194,18 +147,6 @@ class PostController extends AbstractActionController
                             $this->getPostFilesTable()->savePostFile($postFile);
                         }
                     }
-                    
-
-                    
-                    /*$viewModel = new ViewModel(array(
-                        'data'     => $data,
-                        'postType' => $this->postType,
-                        'files' => $files
-                    ));
-                    
-                    $viewModel->setTemplate("partial/loadPost");
-                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
-                    $view = $viewRender->render($viewModel);*/
                     
                     $postArray = array(
                                     'id'       => $data['post_id'],
@@ -275,7 +216,8 @@ class PostController extends AbstractActionController
         
         if ($request->isPost()) {
             //sanitize post value
-            $group_number = filter_var($_POST["group_no"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
+            $group_number = filter_var($_POST["group_no"], 
+            FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
             
             //throw HTTP error if group number is not valid
             if(!is_numeric($group_number)){
@@ -351,39 +293,8 @@ class PostController extends AbstractActionController
         }    
     }    
 
-    public function loadAction()
-    {
-        $request = $this->getRequest();
-        
-        if ($request->isPost()) {
-            try {
-                
-                $postId = $request->getPost('postId');
-                
-                $post = $this->getPostTable()->getPost($postId);
-                
-                $view = new ViewModel(array(
-                    'post' => $post,
-                    'userSession' => $this->userSession
-                ));
-                $view->setTerminal(true);
-                return $view;                
-            
-            } catch(\Exception $ex) {
-                
-                $response = $this->getResponse();
-                $response->getHeaders()
-                         ->setContent($ex->getMessage());
-                return $response;         
-                            
-            }
+   
 
-        }    
-    }
-
-    public function deleteAction()
-    {
-    }
     public function getGroupsCountAction()
     {
         $request = $this->getRequest();

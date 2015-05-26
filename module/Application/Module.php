@@ -164,7 +164,7 @@ class Module
             'factories' => array(
                 'AuthService' => function ($serviceManager) {
                     $adapter = $serviceManager->get('Zend\Db\Adapter\Adapter');
-                    $dbAuthAdapter = new DbAuthAdapter ( $adapter, 'users', 'username', 'password' );
+                    $dbAuthAdapter = new DbAuthAdapter ( $adapter, 'users', 'user_name', 'user_password' );
                     
                     $auth = new AuthenticationService();
                     $auth->setAdapter ( $dbAuthAdapter );

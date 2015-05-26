@@ -9,17 +9,18 @@
 
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <?php
-    $form->setAttribute('action', $this->url('album', array('action' => 'edit', 'id' => $id)));
+    $form->setAttribute('action', $this->url('album', array('action' => 'edit', 
+                                                            'id' => $id)));
     $form->setAttribute('class', 'form-horizontal');
     $form->setAttribute('role', 'form');
     $form->prepare();
     print $this->form()->openTag($form);
-    print $this->formHidden($form->get('id'));
+    print $this->formHidden($form->get('album_id'));
 ?>
            
 <div class="form-group">
     <?php
-        $element = $form->get('title');
+        $element = $form->get('album_title');
         $element->setLabel('Title:')
                 ->setAttribute('id', 'title')
                 ->setAttribute('class', 'form-control')
@@ -28,14 +29,14 @@
         print '<div class="col-sm-5">';
         print $this->formText($element);
         print '</div>';        
-        if(isset($errMsg['title'])) {
-            print $this->errorHelper($errMsg['title']);
+        if(isset($errMsg['album_title'])) {
+            print $this->errorHelper($errMsg['album_title']);
         }
     ?>
 </div>
 <div class="form-group">
     <?php
-        $element = $form->get('artist');
+        $element = $form->get('album_artist');
         $element->setLabel('Artist:')
                 ->setAttribute('id', 'artist')
                 ->setAttribute('class', 'form-control')
@@ -44,23 +45,23 @@
         print '<div class="col-sm-5">';
         print $this->formText($element);
         print '</div>';
-        if(isset($errMsg['artist'])) {
-            print $this->errorHelper($errMsg['artist']);
+        if(isset($errMsg['album_artist'])) {
+            print $this->errorHelper($errMsg['album_artist']);
         }
     ?>
 </div>
 <div class="form-group">
     <?php
         print '<div class="col-sm-offset-2 col-sm-10">';
-        $imgStr = $form->get('img')->getValue();
+        $imgStr = $form->get('album_img')->getValue();
         if (!empty($imgStr) && file_exists(ROOT_PATH . '/public/img/albums/'.$imgStr)) {
-            print '<img src="/img/albums/'. $imgStr . '" />';    
+            print '<img src="' . $this->basePath('img/albums/' . $imgStr) . '" />';    
         } else {
-            print '<img src="/img/albums/default.png" width="150" />';
-        }
+            print '<img src="' . $this->basePath('/img/albums/default.png') . '" width="150" />';
+        }       
         print '</div>';
-        if(isset($errMsg['img'])) {
-            print $this->errorHelper($errMsg['img']);
+        if(isset($errMsg['album_img'])) {
+            print $this->errorHelper($errMsg['album_img']);
         }
         print '<div class="col-sm-offset-2 col-sm-5">';
         $element = $form->get('fileupload');
@@ -74,7 +75,7 @@
     ?>
 </div>
 <?php
-    print $this->formHidden($form->get('img'));
+    print $this->formHidden($form->get('album_img'));
     print '<div class="col-sm-offset-2 col-sm-10">';
     
     $element = new Element\Button('edit-button');
@@ -82,7 +83,6 @@
             ->setAttribute("type","submit")
             ->setAttribute("class","btn btn-default");
     print $this->formButton($element);
-    //print $this->formSubmit($form->get('submit'));
     print '</div>';    
 ?> 
 <?php

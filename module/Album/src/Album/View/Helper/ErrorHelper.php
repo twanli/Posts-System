@@ -6,7 +6,6 @@
     {
         public function __invoke($msg)
         {
-            //DebugBreak();
             $msgErr = "";
             foreach ($msg as $key => $value) {
                 $msgErr .= $value."<br>";

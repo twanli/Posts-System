@@ -1,12 +1,15 @@
 <?php 
     use \Zend\Session\Container;
     use \Zend\Permissions\Acl\Acl;
-    use \Application\Model\UserRole;    
+    use \Application\Model\UserRole;
+    use \Zend\Config\Reader\Ini;
 ?>
 <?php echo $this->doctype(); ?>
 <?php 
     $userSession = new Container('user');
-    $acl = $this->layout()->acl;                                
+    $acl    = $this->layout()->acl;
+    $reader = new Ini();
+    $config  = $reader->fromFile(ROOT_PATH . '/config/my.config.ini', 'path');
 ?>
 
 <html lang="en">
@@ -32,6 +35,7 @@
             ->prependFile($this->basePath('js/my.js'))
             //->prependFile($this->basePath('js/filedrag.js'))
             ->prependFile($this->basePath('js/jquery.postAction.js'))
+            ->prependScript('var baseUrl = "'.$config['path']['absolutePath'].'";')
             //->prependFile($this->basePath('js/bootstrap.min.js'))
             ->prependFile($this->basePath('js/jquery.fancybox.pack.js'))
             ->prependFile($this->basePath('js/tmpload.min.js'))
@@ -48,11 +52,7 @@
         <nav class="navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+
                     <a class="navbar-brand" href="<?php echo $this->url('album') ?>"><img src="<?php echo $this->basePath('img/songs.gif') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Your Favorite Songs:-)') ?></a>
                 </div>
                 <?php $currentUrl = explode('/',$this->serverUrl(true)); 
@@ -63,11 +63,11 @@
                             <li class="active"><a href="<?php echo $this->url('album') ?>"><?php echo $this->translate('Home') ?></a></li>
                             <?php  
                                 $userRole = new UserRole();
-                                
+                                //DebugBreak();
                                 if ($acl->isAllowed($userSession->role, UserRole::USERS_INDEX)) { ?>
                                 <li><a href="<?php echo $this->url('users') ?>">Users</a></li>
                             <?php } else {?>
-                                <li><a href="<?php echo $this->url('users', array('action' => 'edit', 'id' => $userSession->id)) ?>">Manage your account</a></li>
+                                <li><a href="<?php echo $this->url('users', array('action' => 'manageAcc', 'id' => $userSession->id)) ?>">Manage your account</a></li>
                             <?php } ?>
                             <li><a href="<?php echo $this->url('post') ?>">Posts</a></li>
                             <li class="logout"><span><?php print $userSession->username; ?> is logged</span> <a href="<?php echo $this->url('log', array('action'=>'logout')) ?>">Log out</a></li>

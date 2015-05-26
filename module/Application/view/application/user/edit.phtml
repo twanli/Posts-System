@@ -1,4 +1,5 @@
 <?php
+    //DebugBreak();
     use Zend\Form\Element;
     use Zend\Permissions\Acl\Acl;
     use Zend\Session\Container;
@@ -17,20 +18,21 @@
 <?php } ?>
 <div class="clearfix"></div>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<?php
+<?php                                      
     $form->setAttribute('action',
         $this->url('users', array('action' => 'edit', 'id' => $id)));
+    //$form->setAttribute('method', 'POST');
     $form->setAttribute('class', 'form-horizontal');
     $form->setAttribute('role', 'form');
     $form->prepare();
     print $this->form()->openTag($form);
-    print $this->formHidden($form->get('id'));
+    print $this->formHidden($form->get('user_id'));
     
 ?>
            
 <div class="form-group">
     <?php
-        $element = $form->get('username');
+        $element = $form->get('user_name');
         $element->setAttribute('id', 'username')
                 ->setAttribute('class', 'form-control')
                 ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
@@ -38,8 +40,8 @@
         print '<div class="col-sm-5">';
         print $this->formText($element);
         print '</div>';
-        if(isset($errMsg['username'])) {
-            print $this->errorHelper($errMsg['username']);
+        if(isset($errMsg['user_name'])) {
+            print $this->errorHelper($errMsg['user_name']);
         }
         
     ?>
@@ -52,7 +54,7 @@
            $selectOptions[$role->user_roles_id] = $role->user_roles_name;
         }
         
-        $element = $form->get('role');
+        $element = $form->get('user_role');
         $element->setAttribute('id', 'role')
                 ->setAttribute('class', 'form-control')
                 ->setAttribute('options', $selectOptions)                    
@@ -72,7 +74,7 @@
 
 <div class="form-group">
     <?php
-        $element = $form->get('password');;
+        $element = $form->get('user_password');;
         $element->setAttribute('id', 'password')
                 ->setAttribute('class', 'form-control')
                 ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
@@ -80,8 +82,8 @@
         print '<div class="col-sm-5">';
         print $this->formPassword($element);
         print '</div>';
-        if(isset($errMsg['password'])) {
-            print $this->errorHelper($errMsg['password']);
+        if(isset($errMsg['user_password'])) {
+            print $this->errorHelper($errMsg['user_password']);
         }
              
     ?>
@@ -105,7 +107,7 @@
 
 <div class="form-group">
     <?php
-        $element = $form->get('active');;
+        $element = $form->get('user_active');;
         $element->setAttribute('id', 'active')
                 ->setAttribute('class', 'form-control')
                 ->setLabelAttributes(array('class' => 'col-sm-2 control-label'));
@@ -150,7 +152,7 @@
             ->setAttribute("type","submit")
             ->setAttribute("class","btn btn-default");
     print $this->formButton($element);    
-    print '</div>';    
+    print '</div>';
 ?> 
 <?php
     

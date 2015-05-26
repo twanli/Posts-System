@@ -60,7 +60,8 @@ class UserRolesTable
     
         } else {
             if ($this->getUserRole($id)) {
-                $this->tableGateway->update($data, array('user_roles_id' => $id));
+                $this->tableGateway->update($data, 
+                                            array('user_roles_id' => $id));
             } else {
                 throw new \Exception('User id does not exist');
             }
@@ -69,7 +70,7 @@ class UserRolesTable
 
     public function deleteUserRole($id)
     {
-        $this->tableGateway->delete(array('id' => (int) $id));
+        $this->tableGateway->delete(array('user_roles_id' => (int) $id));
     }
  }  
 ?>

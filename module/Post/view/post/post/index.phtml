@@ -9,8 +9,8 @@
 ?>
 <div class="post-message-form row">
     <div class="col-sm-2"> 
-        <img src="<?php print "/img/users/".$userSession->img; ?>" 
-             alt="<?php print $userSession->username; ?>"
+        <img src="<?php print $this->basePath('/img/users/'.$userSession->img); ?>" 
+             alt="<?php print $userSession->username; ?>" width="70"
         >
     </div>
     <div class="col-sm-10">

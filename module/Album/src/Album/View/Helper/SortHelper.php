@@ -2,20 +2,41 @@
     namespace Album\View\Helper;
     use Zend\View\Helper\AbstractHelper;
      
-    class ErrorHelper extends AbstractHelper
+    class SortHelper extends AbstractHelper
     {
-        public function __invoke($msg)
+        public function __invoke($orderby, $order, $way)
         {
-            //DebugBreak();
-            $msgErr = "";
-            foreach ($msg as $key => $value) {
-                $msgErr .= $value."<br>";
-            }
-
-            $outputHTML = '<div class="col-sm-offset-2 col-sm-5">'."\n".
-            '<span class="alert">'.$msgErr.'</span></div>';
-            
-            return $outputHTML;
+             if ($orderby == $order) {
+                 switch ($way) {
+                    case 'asc':
+                      $url = $this->view->url('sort', 
+                                              array('orderby'=>$order, 
+                                                        'way'=>'desc'));
+                      $title = "SORT IN DESCENDING ORDER";
+                      break;
+                    case 'desc':
+                      $url = $this->view->url('sort', 
+                                                array('orderby'=>$order, 
+                                                          'way'=>'asc'));
+                      $title = "SORT IN ASCENDING ORDER";
+                      break;
+                    default:
+                      $url = $this->view->url('sort', 
+                                                array('orderby'=>$order, 
+                                                    'way'=>'asc'));
+                      $title = "SORT IN ASCENDING ORDER";
+                      break;                 
+                 }
+             } else {
+                 $url = $this->view->url('sort',
+                                                array('orderby'=>$order, 
+                                                      'way'=>'asc'));
+                 $title = "SORT IN ASCENDING ORDER";
+             }
+             
+             return array('url'   => $url,
+                          'title' => $title
+                         );
         }
     }  
 ?>

@@ -51,14 +51,14 @@
                ->offset($position);
                
         
-        $select->join('users', 'users.id = posts.post_user_id'
-                     , array('post_username' => 'username', 
-                             'post_username_img' => 'img'));
+        $select->join('users', 'users.user_id = posts.post_user_id'
+                     , array('post_username' => 'user_name', 
+                             'post_username_img' => 'user_img'));
         $select->join('likes', 'likes.like_post_id = posts.post_id', array(), 'left')
                ->join(array('users_like' => 'users'), 
-                      'likes.like_user_id = users_like.id', 
+                      'likes.like_user_id = users_like.user_id', 
                       array('post_like_usernames' => 
-                      new Expression('GROUP_CONCAT(DISTINCT users_like.username)')), 
+                      new Expression('GROUP_CONCAT(DISTINCT users_like.user_name)')), 
                       'left')
                ->join('post_files', 'post_files.file_post_id = posts.post_id', 
                         array('post_file_new_names' => 
@@ -101,14 +101,14 @@
                ->where(array('post_parent_id' => $parentId, 
                              'post_type' => 'r'));
         
-        $select->join('users', 'users.id = posts.post_user_id'
-                     , array('post_username' => 'username',
-                             'post_username_img' => 'img' 
+        $select->join('users', 'users.user_id = posts.post_user_id'
+                     , array('post_username' => 'user_name',
+                             'post_username_img' => 'user_img' 
                             ));
         $select->join('likes', 'likes.like_post_id = posts.post_id', array(), 'left')
-               ->join(array('users_like' => 'users'), 'likes.like_user_id = users_like.id',
+               ->join(array('users_like' => 'users'), 'likes.like_user_id = users_like.user_id',
                       array('post_like_usernames' => 
-                      new Expression('GROUP_CONCAT(DISTINCT users_like.username)')),
+                      new Expression('GROUP_CONCAT(DISTINCT users_like.user_name)')),
                       'left')
                ->join('post_files', 'post_files.file_post_id = posts.post_id', 
                         array('post_file_new_names' => 
@@ -168,8 +168,8 @@
         $select->columns(array('*'))
                ->where(array('post_id' => $postId));
         
-        $select->join('users', 'users.id = posts.post_user_id'
-                     , array('post_username' => 'username'));
+        $select->join('users', 'users.user_id = posts.post_user_id'
+                     , array('post_username' => 'user_name'));
 
         $sql = new Sql($this->adapter);
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -233,7 +233,7 @@
             throw new \Exception('There is no post to delete.');
         }        
          
-        $this->tableGateway->delete(array('id' => (int) $id));
+        $this->tableGateway->delete(array('post_id' => (int) $id));
      }
      
      public function updatePostMsg($postId = null, $msg = null)
